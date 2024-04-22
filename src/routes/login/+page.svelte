@@ -1,5 +1,5 @@
 <script>
-	import { invalidateAll } from '$app/navigation';
+	import { goto, invalidateAll } from '$app/navigation';
 	import logo1 from '$lib/img/logo1.png';
 
 	export let data;
@@ -14,13 +14,20 @@
 	const handleSignIn = async () => {
 		if (email !== '' && password !== '') {
 			loading = true;
-			const { error } = await supabase.auth.signInWithPassword({
+			const { data, error } = await supabase.auth.signInWithPassword({
 				email,
 				password
 			});
 			if (!error) {
 				errorMessage = '';
-				invalidateAll();
+				const { data: user_info } = await supabase
+					.from('profiles')
+					.select('role')
+					.eq('id', data.session.user.id)
+					.single();
+				invalidateAll().then(() => {
+					goto(`/${user_info?.role || 'student'}`);
+				});
 			} else {
 				errorMessage = error?.message;
 			}
@@ -32,13 +39,13 @@
 </script>
 
 <svelte:head>
-	<title>Login | Sequoia School Management System</title>
+	<title>Login | KDSE Report Management System</title>
 </svelte:head>
 <div class="flex items-center justify-center h-screen">
 	<div class="w-auto items-center flex flex-col justify-center">
 		<img class="w-96" alt="school logo" src={logo1} />
 		<h1 class="text-xl md:text-4xl font-extrabold mb-2">Welcome To</h1>
-		<h1 class="text-xl md:text-4xl font-extrabold mb-10">Sequoia International School Site</h1>
+		<h1 class="text-xl md:text-4xl font-extrabold mb-10">KDSE Report Management System</h1>
 		<h1 class="mb-10 text-md md:text-2xl font-semibold">Login to your account</h1>
 		<form>
 			<div class="form-control w-auto sm:w-80">

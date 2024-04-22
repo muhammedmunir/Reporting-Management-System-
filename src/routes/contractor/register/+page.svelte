@@ -13,7 +13,7 @@
 	let full_name = '';
 	let errorMessage = '';
 	let loading = false;
-	let role = 'student';
+	let role = 'contractor';
 
 	const handleSignIn = async () => {
 		if (email !== '' && password !== '') {
@@ -28,7 +28,7 @@
 					.from('profiles')
 					.update({ username, full_name, matrikID, role })
 					.eq('id', data.session?.user.id);
-				goto('/student');
+				goto(`/${role}`);
 			} else {
 				errorMessage = error?.message;
 			}
@@ -46,7 +46,7 @@
 	<div class="w-auto items-center flex flex-col justify-center">
 		<h1 class="text-xl md:text-4xl font-extrabold mb-10">KDSE Report Management System</h1>
 		<h1 class="text-xl md:text-4xl font-extrabold mb-10">Student Register Page</h1>
-		<h1 class="mb-10 text-md md:text-2xl font-semibold">Register your account</h1>
+		<h1 class="mb-10 text-md md:text-2xl font-semibold">Register as Contractor</h1>
 		<form>
 			<div class="form-control w-auto sm:w-80">
 				<div class="label">
@@ -99,7 +99,7 @@
 
 			<div class="form-control w-auto sm:w-80">
 				<div class="label">
-					<span class="label-text font-semibold">Kad Matrik</span>
+					<span class="label-text font-semibold">Staff ID</span>
 				</div>
 				<input
 					bind:value={matrikID}

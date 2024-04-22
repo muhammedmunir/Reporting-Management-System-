@@ -3,7 +3,6 @@
 	import { page } from '$app/stores';
 	import { onMount, onDestroy } from 'svelte';
 	import html2canvas from 'html2canvas';
-	import logo3 from '$lib/img/logo3.png';
 
 	let downloadLink;
 
@@ -48,12 +47,7 @@
 	</div>
 	<div id="qr-container" class="p-5">
 		<div class="w-full flex flex-row justify-center">
-			<Qr
-				text={$page.url.searchParams.get('qrcode')}
-				logoData={logo3}
-				isShowLogo={true}
-				qrSize={256}
-			/>
+			<Qr text={$page.url.searchParams.get('qrcode')} isShowLogo={true} qrSize={256} />
 		</div>
 
 		<div class="w-full flex flex-row justify-center pb-4">
