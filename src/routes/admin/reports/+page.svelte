@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { invalidate } from '$app/navigation';
-	import type { PageData } from './$types';
+	import type { PageData } from '../reports/$types';
 	
 	export let data: PageData;
 	let { supabase, session } = data;

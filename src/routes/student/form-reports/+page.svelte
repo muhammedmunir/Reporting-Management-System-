@@ -58,7 +58,7 @@
 				</tr>
 			</thead>
 			<tbody class="divide-y divide-gray-200">
-				{#each reports as _, index}
+				{#each data.reports as _, index}
 					<tr class="hover:bg-gray-100">
 						<td class="py-2 px-4 border">{index + 1}</td>
 						<td class="py-2 px-4 border">{_.description}</td>
