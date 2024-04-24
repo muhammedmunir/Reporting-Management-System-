@@ -7,7 +7,9 @@ export const load = (async ({ parent, url, depends }) => {
 	const { data: reports } = await supabase
 		.from('reports')
 		.select(`*`)
-		.eq('status', 'complete')
+		.not('status', 'eq', 'complete')
+		.not('status', 'eq', 'pending')
+		.not('status', 'eq', 'rejected')
 		.order('created_at', { ascending: true });
 
 	return { reports };

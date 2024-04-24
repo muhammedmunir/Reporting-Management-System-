@@ -8,6 +8,9 @@ export const load = (async ({ parent, url, depends }) => {
 		.from('reports')
 		.select(`*`)
 		.not('status', 'eq', 'complete')
+		.not('status', 'eq', 'search contractor')
+		.not('status', 'eq', 'in progress')
+		.not('status', 'eq', 'rejected')
 		.order('created_at', { ascending: true });
 
 	return { reports };

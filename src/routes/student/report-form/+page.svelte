@@ -9,6 +9,9 @@
 	let { supabase, session } = data;
 	$: ({ supabase, session } = data);
 
+
+	let noblock = '';
+	let place = '';
 	let description = '';
 	let severity = '';
 	let images: FileList | null = null;
@@ -43,9 +46,13 @@
 		// Insert report into 'reports' table
 		const { data: insertedReport, error } = await supabase.from('reports').insert([
 			{
+				kolej,
+				noblock,
+				place,
 				description,
 				severity: severityNumber,
 				images: extractFullPath(imageUrls),
+				important,
 				owner: session?.user.id
 			}
 		]);
@@ -62,13 +69,50 @@
 		severity = '';
 		images = null;
 	};
+
+	const handleSignOut = async () => {
+		await supabase.auth.signOut();
+		goto('/login', { replaceState: true });
+	};
+
+	let kolej = '';
+	let option = [
+		'KOLEJ RAHMAN PUTRA',
+		'KOLEJ TUN FATIMAH',
+		'KOLEJ TUN RAZAK',
+		'KOLEJ TUN HUSSEIN ONN',
+		'KOLEJ TUN DR. ISMAIL',
+		'KOLEJ TUANKU CANSELOR',
+		'KOLEJ PERDANA',
+		'KOLEJ 9 DAN 10',
+		'KOLEJ DATIN SERI ENDON',
+		'KOLEJ DATO ONN JAAFAR',
+	]
+
+	$: console.log('Changed selected:', kolej)
+	$: console.log('Updated options:', option)
+
+	let important = '';
 </script>
 
-<svelte:head>
-	<title>Report Form | KDSE Report Management System</title>
-</svelte:head>
+<header class="flex flex-col relative z-20">
+    <div class="max-w-[1400px] mx-auto w-full flex items-center justify-between p-4 py-6">
+        <a href="/student">
+            <h1 class="font-semibold">UTM<span class="text-indigo-400">Complaint</span></h1>
+        </a>
+        <button class="md:hidden grid place-items-center">
+            <i class="fa-solid fa-bars"></i>
+        </button>
+        <nav class="md:flex items-center gap-4 lg:gap-6">
+            <a class="duration-200 hover:text-indigo-400 cursor-pointer" href="/student/report-form">Make Report</a>
+			<a class="duration-200 hover:text-indigo-400 cursor-pointer" href="/student/form-reports">View Reports</a>
+            <a class="duration-200 hover:text-indigo-400 cursor-pointer" href="/student/ranking">View Ranking</a>
+			<button class="specialBtn" on:click={handleSignOut}><p>Logout</p></button>
+        </nav>
+    </div>
+</header>
 
-<div
+<!--<main
 	class="px-10 py-10 pt-3 mx-auto max-w-[600px] bg-white border border-orange-700 border-t-0 border-b-0"
 >
 	<div class="pb-11">
@@ -78,43 +122,92 @@
 			<li class="text-sm mb-2">Fill the form to report</li>
 		</ul>
 		<hr class="h-px mt-2 bg-gray-200 border-0 dark:bg-gray-700" />
-	</div>
+	</div>-->
 
-	<form on:submit|preventDefault={handleSubmit}>
-		<div>
-			<label for="description">Description of the Report</label>
+	<main class="register flex flex-col justify-center items-center">
+	
+	<h1 class="text-3xl font-bold mb-2">Form Report</h1>
+
+	<form on:submit|preventDefault={handleSubmit} class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+		<dir class="pb-5">
+			<ul class="list-disc pl-10">
+				<li class="text-sm text-gray-700 font-bold mb-2">Fill the form to report</li>
+			</ul>
+		</dir>
+		<div class="mb-6">
+			<label for="kolej" class="block text-gray-700 text-sm font-bold mb-2">Kolej</label>
+			<select bind:value={kolej} class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus: shadow-outline">
+				{#each option as value}<option {value}>{value}</option>{/each}
+			</select>
+		</div>
+		<div class="mb-6">
+			<label for="noblock" class="block text-gray-700 text-sm font-bold mb-2">No. Block</label>
+			<input
+				id="noblock"
+				type="text"
+				bind:value={noblock}
+				placeholder="Type your No. Block here"
+				class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus: shadow-outline"
+			/>
+		</div>
+		<div class="mb-6">
+			<label for="place" class="block text-gray-700 text-sm font-bold mb-2">Place (Room Number @ Toilet Location @ Common Area)</label>
+			<input
+				id="place"
+				type="text"
+				bind:value={place}
+				placeholder="Type your place here"
+				class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus: shadow-outline"
+			/>
+		</div>
+		<div class="mb-6">
+			<label for="description" class="block text-gray-700 text-sm font-bold mb-2">Description of the Report</label>
 			<textarea
 				id="description"
 				bind:value={description}
-				class="block w-full mt-1 border border-orange-300 rounded-md"
+				placeholder="Type your Description here"
+				class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus: shadow-outline"
 				rows="4"
 			></textarea>
 		</div>
-		<div>
-			<label for="severity">Severity (1-10)</label>
+		<div class="mb-6">
+			<label for="severity" class="block text-gray-700 text-sm font-bold mb-2">Severity (1-10)</label>
 			<input
 				type="number"
 				id="severity"
 				bind:value={severity}
-				class="block w-full mt-1 border border-orange-300 rounded-md"
+				class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus: shadow-outline"
 				min="1"
 				max="10"
 			/>
 		</div>
-		<div>
-			<label for="images">Images</label>
+		<div class="mb-6">
+			<label for="images" class="block text-gray-700 text-sm font-bold mb-2">Images</label>
 			<input
 				type="file"
 				id="images"
 				bind:files={images}
 				multiple
 				accept="image/*"
-				class="block w-full mt-1"
+				class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus: shadow-outline"
 			/>
+		</div>
+		<div class="mb-6">
+			<label for="important" class="block text-gray-700 text-sm font-bold mb-2">Important</label>
+			<label class="block text-gray-700 text-sm font-bold mb-2">
+				<input type="radio" bind:group={important} value={"Allow contractor to fix/repair without me in the room"} />
+				Allow contractor to fix/repair without me in the room
+			</label>
+			<h1> </h1>
+			<label class="block text-gray-700 text-sm font-bold mb-2">
+				<input type="radio" bind:group={important} value={"Please contact me before fix / repair"} />
+				Please contact me before fix / repair
+			</label>
 		</div>
 		<button type="submit" class="px-4 py-2 mt-4 bg-blue-500 text-white rounded hover:bg-blue-600"
 			>Submit</button
 		>
+		<a class="duration-200 hover:text-indigo-400 cursor-pointer" href="/student">Cancel</a>
 	</form>
 
 	<p class="px-8 text-center text-sm text-muted-foreground">
@@ -124,4 +217,10 @@
 		and{' '}
 		<a href="/privacy" class="underline underline-offset-4 hover:text-primary">Privacy Policy</a>.
 	</p>
-</div>
+</main>
+
+<section class={"min-h-screen flex flex-col px-4"}>
+    <dev class="flex flex-col flex-1 max-w-[1400px] mx-auto w-full">
+        <slot/>
+    </dev>
+</section>

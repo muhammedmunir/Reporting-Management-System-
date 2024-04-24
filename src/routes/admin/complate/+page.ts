@@ -1,13 +1,14 @@
 import type { PageLoad } from './$types';
 
 export const load = (async ({ parent, url, depends }) => {
-	depends('student:reports');
+	depends('admin:reports');
 
 	const { supabase, session } = await parent();
 	const { data: reports } = await supabase
 		.from('reports')
 		.select(`*`)
-		.eq('owner', session?.user.id)
+		.eq('status', 'complete')
+		.not('status', 'eq', 'rejected')
 		.order('created_at', { ascending: true });
 
 	return { reports };

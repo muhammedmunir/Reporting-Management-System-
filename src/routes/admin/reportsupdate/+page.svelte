@@ -1,8 +1,8 @@
 <script lang="ts">
-	import { invalidate } from '$app/navigation';
 	import { goto } from '$app/navigation';
+	import { invalidate } from '$app/navigation';
 	import type { PageData } from './$types';
-
+	
 	export let data: PageData;
 	let { supabase, session } = data;
 	$: ({ supabase, session } = data);
@@ -32,10 +32,10 @@
     </div>
 </header>
 
-<main class="max-w-4xl mx-auto mt-12 px-4">
+<main class="max-w-6xl mx-auto mt-12 px-4">
 	<div class="flex flex-row justify-between">
 		<div>
-			<p class="font-bold text-2xl">View Students</p>
+			<p class="font-bold text-2xl">Update Reports</p>
 			<p class="text-sm font-semibold pb-5">Total : {data.reports?.length}</p>
 		</div>
 	</div>
@@ -44,14 +44,54 @@
 			<thead class="bg-gray-200">
 				<tr>
 					<th class="py-2 px-4 border">No</th>
-					<th class="py-2 px-4 border">Name</th>
+					<th class="py-2 px-4 border">No. Block</th>
+					<th class="py-2 px-4 border">Place</th>
+					<th class="py-2 px-4 border">Images</th>
+					<th class="py-2 px-4 border">Status</th>
+					<th class="py-2 px-4 border">Options</th>
 				</tr>
 			</thead>
 			<tbody class="divide-y divide-gray-200">
 				{#each data.reports as _, index}
 					<tr class="hover:bg-gray-100">
 						<td class="py-2 px-4 border">{index + 1}</td>
-						<td class="py-2 px-4 border">{_.username}</td>
+						<td class="py-2 px-4 border">{_.noblock}</td>
+						<td class="py-2 px-4 border">{_.place}</td>
+						<td class="py-2 px-4 border">
+							{#each _.images as childnode, index}
+								<div class="flex flex-col">
+									<p class="text-sm font-medium">Image {index + 1}</p>
+									<div class="">
+										<img
+											width="200"
+											src={supabase.storage.from('').getPublicUrl(childnode).data.publicUrl}
+											alt="gmabnar"
+										/>
+									</div>
+								</div>
+							{/each}
+						</td>
+						<td class="py-2 px-4 border">{_.status}</td>
+						<td class="py-2 px-4 border">
+							<div class="flex flex-col mb-3">
+								<button
+									on:click={async () => {
+										await supabase.from('reports').update({ status: 'complete' }).eq('id', _.id);
+										invalidate('admin:reports');
+									}}
+									class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-1 rounded focus:outline-none sm:px-20">Confirm</button
+								>
+							</div>
+							<div class="flex flex-col">							
+								<button
+									on:click={async () => {
+										await supabase.from('reports').delete().eq('id', _.id);
+										invalidate('admin:reports');
+									}}
+									class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-1 rounded focus:outline-none sm:px-20">Cancel</button
+								>
+							</div>
+						</td>
 					</tr>
 				{/each}
 			</tbody>
