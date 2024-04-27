@@ -8,7 +8,7 @@ export const load = (async ({ parent, url, depends }) => {
 		.from('reports')
 		.select(`*`)
 		.eq('owner', session?.user.id)
-		.order('created_at', { ascending: true });
+		.order('created_at', { ascending: false });
 
 	return { reports };
 }) satisfies PageLoad;

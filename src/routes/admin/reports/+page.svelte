@@ -2,8 +2,10 @@
 	import { goto } from '$app/navigation';
 	import { invalidate } from '$app/navigation';
 	import type { PageData } from '../reports/$types';
+	import { page } from "$app/stores";
 	
 	export let data: PageData;
+	let reports = data.reports;
 	let { supabase, session } = data;
 	$: ({ supabase, session } = data);
 
@@ -11,6 +13,33 @@
 		await supabase.auth.signOut();
 		goto('/login', { replaceState: true });
 	};
+
+	/*let reportid: string = $page.url.searchParams.get('reportid')
+	$: reports = data.reports.find((reports) => _.id === reportidid);
+	const handlereportdetail = async () => {
+		reportid = data.reports;
+		goto('/admin/reportdetail?reportid=${.id}');
+	};*/
+
+	/*let reportid: string = $page.url.searchParams.get('reportid');
+    $: reports = data.reports.find((_) => _.id === reportid) || [];
+
+    const handlereportdetail = async (id: string) => {
+        reportid = id;
+        goto(`/admin/reportdetail?reportid=${id}`);
+    };*/
+
+	let reportid: string = $page.url.searchParams.get('reportid') || '';
+    $: reports = data.reports.find((_) => _.id === reportid) || [];
+
+    const handlereportdetail = async (id: any) => {
+        reportid = id;
+        goto(`/admin/reportsdetail?reportid=${id}`);
+    };
+
+	/*let reportid: string;
+	$: reports = data.reports.find((reports) => _.id === id);
+	const ClickId = (reports : any) => { _.id = id; };*/
 </script>
 
 <header class="flex flex-col relative z-20">
@@ -24,7 +53,7 @@
         <nav class="md:flex items-center gap-4 lg:gap-6">
             <a class="duration-200 hover:text-indigo-400 cursor-pointer" href="/admin/reports">New Reports</a>
 			<a class="duration-200 hover:text-indigo-400 cursor-pointer" href="/admin/reportsupdate">Update Reports</a>
-			<a class="duration-200 hover:text-indigo-400 cursor-pointer" href="/admin/complate">Complate Reports</a>
+			<a class="duration-200 hover:text-indigo-400 cursor-pointer" href="/admin/complete">Completed Reports</a>
             <a class="duration-200 hover:text-indigo-400 cursor-pointer" href="/admin/students">Ranking Students</a>
 			<a class="duration-200 hover:text-indigo-400 cursor-pointer" href="/admin/contractors">Ranking Contractors</a>
 			<button class="specialBtn" on:click={handleSignOut}><p>Logout</p></button>
@@ -33,6 +62,9 @@
 </header>
 
 <main class="max-w-6xl mx-auto mt-12 px-4">
+	<h2>{reportid}</h2>
+	<h2>{reports.kolej}</h2>
+	{$page.url.searchParams.get("reportid")}
 	<div class="flex flex-row justify-between">
 		<div>
 			<p class="font-bold text-2xl">New Reports</p>
@@ -75,7 +107,7 @@
 							{/each}
 						</td>
 						<td class="py-2 px-4 border">
-							<div class="flex flex-col mb-3">
+							<!--<div class="flex flex-col mb-3">
 								<button
 									on:click={async () => {
 										await supabase.from('reports').update({ status: 'search contractor' }).eq('id', _.id);
@@ -93,7 +125,19 @@
 									}}
 									class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none sm:px-20">Reject</button
 								>
+							</div>-->
+							<div class="flex flex-col mb-3">
+								<button
+									on:click={() => handlereportdetail(_.id) }
+									class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none sm:px-20">Detail</button
+								>
 							</div>
+							<!--<div class="flex flex-col mb-3">
+								<button
+									on:click={() => ClickId(_.id) }
+									class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none sm:px-20">Detail</button
+								>
+							</div>-->
 						</td>
 					</tr>
 				{/each}

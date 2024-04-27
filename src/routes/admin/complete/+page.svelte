@@ -24,7 +24,7 @@
         <nav class="md:flex items-center gap-4 lg:gap-6">
             <a class="duration-200 hover:text-indigo-400 cursor-pointer" href="/admin/reports">New Reports</a>
 			<a class="duration-200 hover:text-indigo-400 cursor-pointer" href="/admin/reportsupdate">Update Reports</a>
-			<a class="duration-200 hover:text-indigo-400 cursor-pointer" href="/admin/complate">Complate Reports</a>
+			<a class="duration-200 hover:text-indigo-400 cursor-pointer" href="/admin/complete">Completed Reports</a>
             <a class="duration-200 hover:text-indigo-400 cursor-pointer" href="/admin/students">Ranking Students</a>
 			<a class="duration-200 hover:text-indigo-400 cursor-pointer" href="/admin/contractors">Ranking Contractors</a>
 			<button class="specialBtn" on:click={handleSignOut}><p>Logout</p></button>

@@ -124,7 +124,7 @@
 		<hr class="h-px mt-2 bg-gray-200 border-0 dark:bg-gray-700" />
 	</div>-->
 
-	<main class="register flex flex-col justify-center items-center">
+<main class="register flex flex-col justify-center items-center">
 	
 	<h1 class="text-3xl font-bold mb-2">Form Report</h1>
 

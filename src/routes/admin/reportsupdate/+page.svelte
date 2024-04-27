@@ -24,7 +24,7 @@
         <nav class="md:flex items-center gap-4 lg:gap-6">
             <a class="duration-200 hover:text-indigo-400 cursor-pointer" href="/admin/reports">New Reports</a>
 			<a class="duration-200 hover:text-indigo-400 cursor-pointer" href="/admin/reportsupdate">Update Reports</a>
-			<a class="duration-200 hover:text-indigo-400 cursor-pointer" href="/admin/complate">Complate Reports</a>
+			<a class="duration-200 hover:text-indigo-400 cursor-pointer" href="/admin/complete">Completed Reports</a>
             <a class="duration-200 hover:text-indigo-400 cursor-pointer" href="/admin/students">Ranking Students</a>
 			<a class="duration-200 hover:text-indigo-400 cursor-pointer" href="/admin/contractors">Ranking Contractors</a>
 			<button class="specialBtn" on:click={handleSignOut}><p>Logout</p></button>
@@ -44,6 +44,7 @@
 			<thead class="bg-gray-200">
 				<tr>
 					<th class="py-2 px-4 border">No</th>
+					<th class="py-2 px-4 border">Name Contractor</th>
 					<th class="py-2 px-4 border">No. Block</th>
 					<th class="py-2 px-4 border">Place</th>
 					<th class="py-2 px-4 border">Images</th>
@@ -55,6 +56,7 @@
 				{#each data.reports as _, index}
 					<tr class="hover:bg-gray-100">
 						<td class="py-2 px-4 border">{index + 1}</td>
+						<td class="py-2 px-4 border">{_.user_profile_username}</td>
 						<td class="py-2 px-4 border">{_.noblock}</td>
 						<td class="py-2 px-4 border">{_.place}</td>
 						<td class="py-2 px-4 border">

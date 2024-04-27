@@ -81,15 +81,26 @@
 						<td class="py-2 px-4 border">{_.comment}</td>
 						<td class="py-2 px-4 border">
 							<div class="flex flex-col">
-								<button 
-								on:click={async () => {
-									await supabase.from('reports').delete().eq('id', _.id);
-									invalidate('student:reports');
-								}}
-								class="border border-orange-500 bg-red p-2">Cancel</button
-								>
+								{#if _.status == 'pending' || _.status == 'rejected'}
+									<button 
+										on:click={async () => {
+											await supabase.from('reports').delete().eq('id', _.id);
+											invalidate('student:reports');
+										}}
+										class="border border-orange-500 bg-red p-2"
+									>
+										Cancel
+									</button>
+								{:else}
+									<button 
+										disabled
+										class="border border-orange-500 bg-red p-2"
+									>
+										Cancel
+									</button>
+								{/if}
 							</div>
-						</td>
+						</td>						
 					</tr>
 				{/each}
 			</tbody>
