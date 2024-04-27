@@ -2,8 +2,8 @@
 	import { goto } from '$app/navigation';
 	import { invalidate } from '$app/navigation';
 	import type { PageData } from '../reports/$types';
-	import { page } from "$app/stores";
-	
+	import { page } from '$app/stores';
+
 	export let data: PageData;
 	let reports = data.reports;
 	let { supabase, session } = data;
@@ -14,57 +14,41 @@
 		goto('/login', { replaceState: true });
 	};
 
-	/*let reportid: string = $page.url.searchParams.get('reportid')
-	$: reports = data.reports.find((reports) => _.id === reportidid);
-	const handlereportdetail = async () => {
-		reportid = data.reports;
-		goto('/admin/reportdetail?reportid=${.id}');
-	};*/
-
-	/*let reportid: string = $page.url.searchParams.get('reportid');
-    $: reports = data.reports.find((_) => _.id === reportid) || [];
-
-    const handlereportdetail = async (id: string) => {
-        reportid = id;
-        goto(`/admin/reportdetail?reportid=${id}`);
-    };*/
-
-	let reportid: string = $page.url.searchParams.get('reportid') || '';
-    $: reports = data.reports.find((_) => _.id === reportid) || [];
-
-    const handlereportdetail = async (id: any) => {
-        reportid = id;
-        goto(`/admin/reportsdetail?reportid=${id}`);
-    };
-
-	/*let reportid: string;
-	$: reports = data.reports.find((reports) => _.id === id);
-	const ClickId = (reports : any) => { _.id = id; };*/
+	const handlereportdetail = async (id: any) => {
+		goto(`/admin/reports/${id}`);
+	};
 </script>
 
 <header class="flex flex-col relative z-20">
-    <div class="max-w-[1400px] mx-auto w-full flex items-center justify-between p-4 py-6">
-        <a href="/admin">
-            <h1 class="font-semibold">UTM<span class="text-indigo-400">Complaint</span></h1>
-        </a>
-        <button class="md:hidden grid place-items-center">
-            <i class="fa-solid fa-bars"></i>
-        </button>
-        <nav class="md:flex items-center gap-4 lg:gap-6">
-            <a class="duration-200 hover:text-indigo-400 cursor-pointer" href="/admin/reports">New Reports</a>
-			<a class="duration-200 hover:text-indigo-400 cursor-pointer" href="/admin/reportsupdate">Update Reports</a>
-			<a class="duration-200 hover:text-indigo-400 cursor-pointer" href="/admin/complete">Completed Reports</a>
-            <a class="duration-200 hover:text-indigo-400 cursor-pointer" href="/admin/students">Ranking Students</a>
-			<a class="duration-200 hover:text-indigo-400 cursor-pointer" href="/admin/contractors">Ranking Contractors</a>
+	<div class="max-w-[1400px] mx-auto w-full flex items-center justify-between p-4 py-6">
+		<a href="/admin">
+			<h1 class="font-semibold">UTM<span class="text-indigo-400">Complaint</span></h1>
+		</a>
+		<button class="md:hidden grid place-items-center">
+			<i class="fa-solid fa-bars"></i>
+		</button>
+		<nav class="md:flex items-center gap-4 lg:gap-6">
+			<a class="duration-200 hover:text-indigo-400 cursor-pointer" href="/admin/reports"
+				>New Reports</a
+			>
+			<a class="duration-200 hover:text-indigo-400 cursor-pointer" href="/admin/reportsupdate"
+				>Update Reports</a
+			>
+			<a class="duration-200 hover:text-indigo-400 cursor-pointer" href="/admin/complete"
+				>Completed Reports</a
+			>
+			<a class="duration-200 hover:text-indigo-400 cursor-pointer" href="/admin/students"
+				>Ranking Students</a
+			>
+			<a class="duration-200 hover:text-indigo-400 cursor-pointer" href="/admin/contractors"
+				>Ranking Contractors</a
+			>
 			<button class="specialBtn" on:click={handleSignOut}><p>Logout</p></button>
-        </nav>
-    </div>
+		</nav>
+	</div>
 </header>
 
 <main class="max-w-6xl mx-auto mt-12 px-4">
-	<h2>{reportid}</h2>
-	<h2>{reports.kolej}</h2>
-	{$page.url.searchParams.get("reportid")}
 	<div class="flex flex-row justify-between">
 		<div>
 			<p class="font-bold text-2xl">New Reports</p>
@@ -128,8 +112,9 @@
 							</div>-->
 							<div class="flex flex-col mb-3">
 								<button
-									on:click={() => handlereportdetail(_.id) }
-									class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none sm:px-20">Detail</button
+									on:click={() => handlereportdetail(_.id)}
+									class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none sm:px-20"
+									>Detail</button
 								>
 							</div>
 							<!--<div class="flex flex-col mb-3">
@@ -146,8 +131,8 @@
 	</div>
 </main>
 
-<section class={"min-h-screen flex flex-col px-4"}>
-    <dev class="flex flex-col flex-1 max-w-[1400px] mx-auto w-full">
-        <slot/>
-    </dev>
+<section class={'min-h-screen flex flex-col px-4'}>
+	<dev class="flex flex-col flex-1 max-w-[1400px] mx-auto w-full">
+		<slot />
+	</dev>
 </section>
