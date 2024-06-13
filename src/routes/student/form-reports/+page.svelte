@@ -12,6 +12,14 @@
 		await supabase.auth.signOut();
 		goto('/login', { replaceState: true });
 	};
+
+	const handlereportdetail = async (id: any) => {
+		goto(`/student/form-reports/${id}`);
+	};
+
+	const handlereportupdate = async (id: any) => {
+		goto(`/student/edit-report/${id}`);
+	};
 </script>
 
 <header class="flex flex-col relative z-20">
@@ -26,6 +34,9 @@
             <a class="duration-200 hover:text-indigo-400 cursor-pointer" href="/student/report-form">Make Report</a>
 			<a class="duration-200 hover:text-indigo-400 cursor-pointer" href="/student/form-reports">View Reports</a>
             <a class="duration-200 hover:text-indigo-400 cursor-pointer" href="/student/ranking">View Ranking</a>
+			<a class="duration-200 hover:text-indigo-400 cursor-pointer" href="/student/coupons">Shop Coupon</a>
+			<a class="duration-200 hover:text-indigo-400 cursor-pointer" href="/student/coupon">My Coupon</a>
+			<a class="duration-200 hover:text-indigo-400 cursor-pointer" href="/student/profile">Profile</a>
 			<button class="specialBtn" on:click={handleSignOut}><p>Logout</p></button>
         </nav>
     </div>
@@ -49,11 +60,10 @@
 			<thead class="bg-gray-200">
 				<tr>
 					<th class="py-2 px-4 border">No</th>
+					<th class="py-2 px-4 border">Kolej</th>
+					<th class="py-2 px-4 border">Place</th>
 					<th class="py-2 px-4 border">Description</th>
-					<th class="py-2 px-4 border">Severity</th>
-					<th class="py-2 px-4 border">Images</th>
 					<th class="py-2 px-4 border">Status</th>
-					<th class="py-2 px-4 border">Comment</th>
 					<th class="py-2 px-4 border">Options</th>
 				</tr>
 			</thead>
@@ -61,45 +71,66 @@
 				{#each data.reports as _, index}
 					<tr class="hover:bg-gray-100">
 						<td class="py-2 px-4 border">{index + 1}</td>
+						<td class="py-2 px-4 border">{_.kolej}</td>
+						<td class="py-2 px-4 border">{_.place}</td>
 						<td class="py-2 px-4 border">{_.description}</td>
-						<td class="py-2 px-4 border">{_.severity}</td>
-						<td class="py-2 px-4 border">
-							{#each _.images as childnode, index}
-								<div class="flex flex-col">
-									<p class="text-sm font-medium">Image {index + 1}</p>
-									<div class="">
-										<img
-											width="200"
-											src={supabase.storage.from('').getPublicUrl(childnode).data.publicUrl}
-											alt="gmabnar"
-										/>
-									</div>
-								</div>
-							{/each}
-						</td>
 						<td class="py-2 px-4 border">{_.status}</td>
-						<td class="py-2 px-4 border">{_.comment}</td>
 						<td class="py-2 px-4 border">
-							<div class="flex flex-col">
-								{#if _.status == 'pending' || _.status == 'rejected'}
-									<button 
+							{#if _.status == 'rejected'}
+							<div class="flex flex-col mb-2">
+								{#if _.status == 'rejected'}
+								<button 
+										on:click={() => handlereportupdate(_.id)}
+										class="border border-red-500 hover:border-red-700 bg-red p-2"
+									>
+										Edit
+								</button>	
+								<!--<button 
 										on:click={async () => {
 											await supabase.from('reports').delete().eq('id', _.id);
 											invalidate('student:reports');
 										}}
-										class="border border-orange-500 bg-red p-2"
+										class="border border-red-500 hover:border-red-700 bg-red p-2"
 									>
-										Cancel
+										Edit
+									</button>-->
+								{:else}
+									<button 
+										disabled
+										class="border border-gray-500 hover:border-gray-700 bg-red p-2"
+									>
+										Edit
+									</button>
+								{/if}
+							</div>
+							<div class="flex flex-col">
+								{#if _.status == 'rejected'}
+									<button 
+										on:click={() => alert(`Comment: ${_.comment}`)}
+										class="border border-red-500 hover:border-red-700 bg-red p-2"
+									>
+										Comment
 									</button>
 								{:else}
 									<button 
 										disabled
-										class="border border-orange-500 bg-red p-2"
+										class="border border-gray-500 hover:border-gray-700 bg-red p-2"
 									>
-										Cancel
+										Comment
 									</button>
 								{/if}
 							</div>
+							{/if}
+							{#if _.status !== 'rejected'}
+							<div class="flex flex-col">
+									<button 
+										on:click={() => handlereportdetail(_.id)}
+										class="border border-green-500 hover:border-green-700 bg-red p-2"
+									>
+										Detail
+									</button>
+							</div>
+							{/if}
 						</td>						
 					</tr>
 				{/each}

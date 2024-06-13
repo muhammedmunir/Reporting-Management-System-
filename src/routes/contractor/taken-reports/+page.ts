@@ -7,6 +7,7 @@ export const load = (async ({ parent, url, depends }) => {
 	const { data: reports } = await supabase
 		.from('reports')
 		.select(`*`)
+		.eq('status', 'in progress')
 		.eq('handleby', session?.user.id)
 		.order('created_at', { ascending: true });
 

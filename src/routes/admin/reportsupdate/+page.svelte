@@ -11,6 +11,10 @@
 		await supabase.auth.signOut();
 		goto('/login', { replaceState: true });
 	};
+
+	const handlereportdetail = async (report_id: any) => {
+		goto(`/admin/reportsupdate/${report_id}`);
+	};
 </script>
 
 <header class="flex flex-col relative z-20">
@@ -27,6 +31,9 @@
 			<a class="duration-200 hover:text-indigo-400 cursor-pointer" href="/admin/complete">Completed Reports</a>
             <a class="duration-200 hover:text-indigo-400 cursor-pointer" href="/admin/students">Ranking Students</a>
 			<a class="duration-200 hover:text-indigo-400 cursor-pointer" href="/admin/contractors">Ranking Contractors</a>
+			<a class="duration-200 hover:text-indigo-400 cursor-pointer" href="/admin/coupons">List Coupons</a>
+			<a class="duration-200 hover:text-indigo-400 cursor-pointer" href="/admin/register-contractor">Contractor Register</a>
+			<a class="duration-200 hover:text-indigo-400 cursor-pointer" href="/admin/profile">Profile</a>
 			<button class="specialBtn" on:click={handleSignOut}><p>Logout</p></button>
         </nav>
     </div>
@@ -44,10 +51,9 @@
 			<thead class="bg-gray-200">
 				<tr>
 					<th class="py-2 px-4 border">No</th>
-					<th class="py-2 px-4 border">Name Contractor</th>
-					<th class="py-2 px-4 border">No. Block</th>
+					<th class="py-2 px-4 border">Kolej</th>
 					<th class="py-2 px-4 border">Place</th>
-					<th class="py-2 px-4 border">Images</th>
+					<th class="py-2 px-4 border">Description</th>
 					<th class="py-2 px-4 border">Status</th>
 					<th class="py-2 px-4 border">Options</th>
 				</tr>
@@ -56,26 +62,48 @@
 				{#each data.reports as _, index}
 					<tr class="hover:bg-gray-100">
 						<td class="py-2 px-4 border">{index + 1}</td>
-						<td class="py-2 px-4 border">{_.user_profile_username}</td>
-						<td class="py-2 px-4 border">{_.noblock}</td>
+						<td class="py-2 px-4 border">{_.kolej}</td>
 						<td class="py-2 px-4 border">{_.place}</td>
-						<td class="py-2 px-4 border">
-							{#each _.images as childnode, index}
-								<div class="flex flex-col">
-									<p class="text-sm font-medium">Image {index + 1}</p>
-									<div class="">
-										<img
-											width="200"
-											src={supabase.storage.from('').getPublicUrl(childnode).data.publicUrl}
-											alt="gmabnar"
-										/>
-									</div>
-								</div>
-							{/each}
-						</td>
+						<td class="py-2 px-4 border">{_.description}</td>
 						<td class="py-2 px-4 border">{_.status}</td>
 						<td class="py-2 px-4 border">
 							<div class="flex flex-col mb-3">
+								{#if _.status == 'in progress' || _.status == 'done progress'}
+								<button
+									on:click={() => handlereportdetail(_.report_id)}
+									class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none sm:px-20"
+									>Detail</button
+								>
+								{:else}
+									<button 
+										disabled
+										class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none sm:px-20"
+									>
+										Detail
+									</button>
+								{/if}
+							</div>
+							<div class="flex flex-col">
+								{#if _.status == 'search contractor'}
+									<button 
+										on:click={async () => {
+											await supabase.from('reports').delete().eq('id', _.id);
+											invalidate('student:reports');
+										}}
+										class="border border-red-500 hover:border-red-700 bg-red p-2"
+									>
+										Delete
+									</button>
+								{:else}
+									<button 
+										disabled
+										class="border border-gray-500 hover:border-gray-700 bg-red p-2"
+									>
+										Delete
+									</button>
+								{/if}
+							</div>
+							<!--<div class="flex flex-col mb-3">
 								<button
 									on:click={async () => {
 										await supabase.from('reports').update({ status: 'complete' }).eq('id', _.id);
@@ -92,7 +120,7 @@
 									}}
 									class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-1 rounded focus:outline-none sm:px-20">Cancel</button
 								>
-							</div>
+							</div>-->
 						</td>
 					</tr>
 				{/each}

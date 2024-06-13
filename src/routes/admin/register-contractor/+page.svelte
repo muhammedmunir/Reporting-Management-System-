@@ -14,9 +14,10 @@
 	let errorMessage = '';
 	let loading = false;
 	let role = 'contractor';
+	let phone = '';
 
 	const handleSignIn = async () => {
-		if (email !== '' && password !== '' && username !== '' && matrikID !== '' && full_name !== '') {
+		if (email !== '' && password !== '' && username !== '' && matrikID !== '' && full_name !== '' && phone !== '') {
 			loading = true;
 			const { data, error } = await supabase.auth.signUp({
 				email,
@@ -26,7 +27,7 @@
 				errorMessage = '';
 				await supabase
 					.from('profiles')
-					.update({ username, full_name, matrikID, role })
+					.update({ username, full_name, matrikID, role, phone })
 					.eq('id', data.session?.user.id);
 				goto(`/${role}`);
 			} else {
@@ -37,7 +38,36 @@
 		}
 		loading = false;
 	};
+
+	const handleSignOut = async () => {
+        await supabase.auth.signOut();
+        goto('/login', { replaceState: true });
+    };
 </script>
+
+<header class="flex flex-col relative z-20">
+    <div class="max-w-[1400px] mx-auto w-full flex items-center justify-between p-4 py-6">
+        <a href="/contractor">
+            <h1 class="font-semibold">UTM<span class="text-indigo-400">Complaint</span></h1>
+        </a>
+        <button class="md:hidden grid place-items-center">
+            <i class="fa-solid fa-bars"></i>
+        </button>
+        <nav class="md:flex items-center gap-4 lg:gap-6">
+            <a class="duration-200 hover:text-indigo-400 cursor-pointer" href="/admin/reports">New Reports</a>
+			<a class="duration-200 hover:text-indigo-400 cursor-pointer" href="/admin/reportsupdate">Update Reports</a>
+			<a class="duration-200 hover:text-indigo-400 cursor-pointer" href="/admin/complete">Completed Reports</a>
+            <a class="duration-200 hover:text-indigo-400 cursor-pointer" href="/admin/students">Ranking Students</a>
+			<a class="duration-200 hover:text-indigo-400 cursor-pointer" href="/admin/contractors">Ranking Contractors</a>
+			<a class="duration-200 hover:text-indigo-400 cursor-pointer" href="/admin/coupons">List Coupons</a>
+			<a class="duration-200 hover:text-indigo-400 cursor-pointer" href="/admin/register-contractor">Contractor Register</a>
+			<a class="duration-200 hover:text-indigo-400 cursor-pointer" href="/admin/profile">Profile</a>
+            <button class="specialBtn" on:click={handleSignOut}><p>Logout</p></button>
+        </nav>
+    </div>
+</header>
+
+
 
 <main class="register flex flex-col justify-center items-center">
 	<!--<div class="w-auto items-center flex flex-col justify-center">
@@ -55,19 +85,6 @@
 					id="email"
 					bind:value={email}
 					placeholder="Type your email here"
-					class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus: shadow-outline"
-				/>
-			</div>
-
-			<div class="mb-6">
-				<div class="label">
-					<span class="block text-gray-700 text-sm font-bold mb-2">Password</span>
-				</div>
-				<input
-					type="password"
-					id="password"
-					bind:value={password}
-					placeholder="Type your password here"
 					class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus: shadow-outline"
 				/>
 			</div>
@@ -103,11 +120,34 @@
 					placeholder="Type your Kad Matrik here"
 					class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus: shadow-outline"
 				/>
+			</div>
 
+			<div class="mb-6">
+				<div class="label">
+					<span class="block text-gray-700 text-sm font-bold mb-2">No. Phone</span>
+				</div>
+				<input
+					bind:value={phone}
+					placeholder="Type your No. Phone here"
+					class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus: shadow-outline"
+				/>
+			</div>
+
+			<div class="mb-6">
+				<div class="label">
+					<span class="block text-gray-700 text-sm font-bold mb-2">Password</span>
+				</div>
+				<input
+					type="password"
+					id="password"
+					bind:value={password}
+					placeholder="Type your password here"
+					class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus: shadow-outline"
+				/>
 				<p class="text-center mt-2 text-lg text-error text-red-600">{errorMessage}</p>
 			</div>
 
-			<div class="flex items-center justify-center">
+			<!--<div class="flex items-center justify-center">
 				<button
 					disabled={loading}
 					on:click={handleSignIn}
@@ -115,10 +155,19 @@
 					class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none"
 					>Register</button
 				>
+			</div>-->
+			<div class="flex items-center justify-center">
+				<button
+					disabled={loading}
+					on:click={handleSignIn}
+					id="login-button"
+					class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none sm:px-20"
+					>Register</button
+				>
 			</div>
 
 			<div class="flex items-center justify-center">
-				<a class="duration-200 hover:text-indigo-400 cursor-pointer py-2 px-4" href="/">Back</a>
+				<a class="duration-200 hover:text-indigo-400 cursor-pointer py-2 px-4" href="/admin">Back</a>
 			</div>
 		</form>
 	<!--</div>-->

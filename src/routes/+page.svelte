@@ -7,8 +7,8 @@
             <i class="fa-solid fa-bars"></i>
         </button>
         <nav class="md:flex items-center gap-4 lg:gap-6">
-            <a class="duration-200 hover:text-indigo-400 cursor-pointer" href="/student/register">Student Register</a>
-			<a class="duration-200 hover:text-indigo-400 cursor-pointer" href="/contractor/register">Contractor Register</a>
+            <a class="duration-200 hover:text-indigo-400 cursor-pointer" href="/register-student">Student Register</a>
+			<a class="duration-200 hover:text-indigo-400 cursor-pointer" href="/apply-register">Apply Contractor</a>
             <button class="specialBtn"><a href="/login">Login</a></button>
         </nav>
     </div>

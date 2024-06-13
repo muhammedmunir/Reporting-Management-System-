@@ -25,6 +25,9 @@
             <a class="duration-200 hover:text-indigo-400 cursor-pointer" href="/student/report-form">Make Report</a>
 			<a class="duration-200 hover:text-indigo-400 cursor-pointer" href="/student/form-reports">View Reports</a>
             <a class="duration-200 hover:text-indigo-400 cursor-pointer" href="/student/ranking">View Ranking</a>
+            <a class="duration-200 hover:text-indigo-400 cursor-pointer" href="/student/coupons">Shop Coupon</a>
+            <a class="duration-200 hover:text-indigo-400 cursor-pointer" href="/student/coupon">My Coupon</a>
+			<a class="duration-200 hover:text-indigo-400 cursor-pointer" href="/student/profile">Profile</a>
 			<button class="specialBtn" on:click={handleSignOut}><p>Logout</p></button>
         </nav>
     </div>

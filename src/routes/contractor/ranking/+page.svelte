@@ -24,7 +24,11 @@
         <nav class="md:flex items-center gap-4 lg:gap-6">
             <a class="duration-200 hover:text-indigo-400 cursor-pointer" href="/contractor/reports">View Reports</a>
 			<a class="duration-200 hover:text-indigo-400 cursor-pointer" href="/contractor/taken-reports">Taken Reports</a>
+			<a class="duration-200 hover:text-indigo-400 cursor-pointer" href="/contractor/donejob">Done Job</a>
             <a class="duration-200 hover:text-indigo-400 cursor-pointer" href="/contractor/ranking">View Ranking</a>
+			<a class="duration-200 hover:text-indigo-400 cursor-pointer" href="/contractor/coupons">Shop Coupon</a>
+			<a class="duration-200 hover:text-indigo-400 cursor-pointer" href="/contractor/coupon">My Coupon</a>
+			<a class="duration-200 hover:text-indigo-400 cursor-pointer" href="/contractor/profile">Profile</a>
 			<button class="specialBtn" on:click={handleSignOut}><p>Logout</p></button>
         </nav>
     </div>

@@ -14,9 +14,10 @@
 	let errorMessage = '';
 	let loading = false;
 	let role = 'student';
+	let phone = '';
 
 	const handleSignIn = async () => {
-		if (email !== '' && password !== '' && username !== '' && matrikID !== '' && full_name !== '') {
+		if (email !== '' && password !== '' && username !== '' && matrikID !== '' && full_name !== '' && phone !== '') {
 			loading = true;
 			const { data, error } = await supabase.auth.signUp({
 				email,
@@ -26,7 +27,7 @@
 				errorMessage = '';
 				await supabase
 					.from('profiles')
-					.update({ username, full_name, matrikID, role })
+					.update({ username, full_name, matrikID, role, phone })
 					.eq('id', data.session?.user.id);
 				goto('/student');
 			} else {
@@ -40,10 +41,6 @@
 </script>
 
 <main class="register flex flex-col justify-center items-center">
-	<!--<div class="w-auto items-center flex flex-col justify-center">
-		<h1 class="text-xl md:text-4xl font-extrabold mb-10">KDSE Report Management System</h1>
-		<h1 class="text-xl md:text-4xl font-extrabold mb-10">Student Register Page</h1>
-		<h1 class="mb-10 text-md md:text-2xl font-semibold">Register your account</h1>-->
 		<h1 class="text-3xl font-bold mb-2">Student Register</h1>
 		<form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
 			<div class="mb-6">
@@ -55,19 +52,6 @@
 					id="email"
 					bind:value={email}
 					placeholder="Type your email here"
-					class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus: shadow-outline"
-				/>
-			</div>
-
-			<div class="mb-6">
-				<div class="label">
-					<span class="block text-gray-700 text-sm font-bold mb-2">Password</span>
-				</div>
-				<input
-					type="password"
-					id="password"
-					bind:value={password}
-					placeholder="Type your password here"
 					class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus: shadow-outline"
 				/>
 			</div>
@@ -103,7 +87,30 @@
 					placeholder="Type your Kad Matrik here"
 					class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus: shadow-outline"
 				/>
+			</div>
 
+			<div class="mb-6">
+				<div class="label">
+					<span class="block text-gray-700 text-sm font-bold mb-2">No. Phone</span>
+				</div>
+				<input
+					bind:value={phone}
+					placeholder="Type your No. Phone here"
+					class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus: shadow-outline"
+				/>
+			</div>
+
+			<div class="mb-6">
+				<div class="label">
+					<span class="block text-gray-700 text-sm font-bold mb-2">Password</span>
+				</div>
+				<input
+					type="password"
+					id="password"
+					bind:value={password}
+					placeholder="Type your password here"
+					class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus: shadow-outline"
+				/>
 				<p class="text-center mt-2 text-lg text-error text-red-600">{errorMessage}</p>
 			</div>
 

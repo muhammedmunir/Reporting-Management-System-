@@ -11,6 +11,10 @@
 		await supabase.auth.signOut();
 		goto('/login', { replaceState: true });
 	};
+
+	const handlereportdetail = async (id: any) => {
+		goto(`/admin/complete/${id}`);
+	};
 </script>
 
 <header class="flex flex-col relative z-20">
@@ -27,6 +31,9 @@
 			<a class="duration-200 hover:text-indigo-400 cursor-pointer" href="/admin/complete">Completed Reports</a>
             <a class="duration-200 hover:text-indigo-400 cursor-pointer" href="/admin/students">Ranking Students</a>
 			<a class="duration-200 hover:text-indigo-400 cursor-pointer" href="/admin/contractors">Ranking Contractors</a>
+			<a class="duration-200 hover:text-indigo-400 cursor-pointer" href="/admin/coupons">List Coupons</a>
+			<a class="duration-200 hover:text-indigo-400 cursor-pointer" href="/admin/register-contractor">Contractor Register</a>
+			<a class="duration-200 hover:text-indigo-400 cursor-pointer" href="/admin/profile">Profile</a>
 			<button class="specialBtn" on:click={handleSignOut}><p>Logout</p></button>
         </nav>
     </div>
@@ -44,9 +51,9 @@
 			<thead class="bg-gray-200">
 				<tr>
 					<th class="py-2 px-4 border">No</th>
+					<th class="py-2 px-4 border">Kolej</th>
+					<th class="py-2 px-4 border">Place</th>
 					<th class="py-2 px-4 border">Description</th>
-					<th class="py-2 px-4 border">Severity</th>
-					<th class="py-2 px-4 border">Images</th>
 					<th class="py-2 px-4 border">Status</th>
 					<th class="py-2 px-4 border">Options</th>
 				</tr>
@@ -55,25 +62,18 @@
 				{#each data.reports as _, index}
 					<tr class="hover:bg-gray-100">
 						<td class="py-2 px-4 border">{index + 1}</td>
+						<td class="py-2 px-4 border">{_.kolej}</td>
+						<td class="py-2 px-4 border">{_.place}</td>
 						<td class="py-2 px-4 border">{_.description}</td>
-						<td class="py-2 px-4 border">{_.severity}</td>
-						<td class="py-2 px-4 border">
-							{#each _.images as childnode, index}
-								<div class="flex flex-col">
-									<p class="text-sm font-medium">Image {index + 1}</p>
-									<div class="">
-										<img
-											width="200"
-											src={supabase.storage.from('').getPublicUrl(childnode).data.publicUrl}
-											alt="gmabnar"
-										/>
-									</div>
-								</div>
-							{/each}
-						</td>
 						<td class="py-2 px-4 border">{_.status}</td>
 						<td class="py-2 px-4 border">
 							<div class="flex flex-col">
+							<button
+									on:click={() => handlereportdetail(_.id)}
+									class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none sm:px-20"
+									>Detail</button
+								>
+							<!--<div class="flex flex-col">
 								<button
 									on:click={async () => {
 										await supabase.from('reports').delete().eq('id', _.id);
@@ -81,6 +81,7 @@
 									}}
 									class="border border-orange-500 bg-red p-2">Remove</button
 								>
+							</div>-->
 							</div>
 						</td>
 					</tr>

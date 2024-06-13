@@ -8,8 +8,7 @@ export const load = (async ({ parent, url, depends }) => {
 		.from('reports')
 		.select(`*`)
 		.eq('status', 'complete')
-		.not('status', 'eq', 'rejected')
-		.order('created_at', { ascending: true });
+		.order('created_at', { ascending: false });
 
 	return { reports };
 }) satisfies PageLoad;

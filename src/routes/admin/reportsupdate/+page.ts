@@ -5,7 +5,7 @@ export const load = (async ({ parent, url, depends }) => {
 
 	const { supabase, session } = await parent();
 	const { data: reports } = await supabase
-		.from('reports')
+		.from('report_users_view')
 		.select(`*`)
 		.not('status', 'eq', 'complete')
 		.not('status', 'eq', 'pending')

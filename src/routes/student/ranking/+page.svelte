@@ -24,6 +24,9 @@
             <a class="duration-200 hover:text-indigo-400 cursor-pointer" href="/student/report-form">Make Report</a>
 			<a class="duration-200 hover:text-indigo-400 cursor-pointer" href="/student/form-reports">View Reports</a>
             <a class="duration-200 hover:text-indigo-400 cursor-pointer" href="/student/ranking">View Ranking</a>
+			<a class="duration-200 hover:text-indigo-400 cursor-pointer" href="/student/coupons">Shop Coupon</a>
+			<a class="duration-200 hover:text-indigo-400 cursor-pointer" href="/student/coupon">My Coupon</a>
+			<a class="duration-200 hover:text-indigo-400 cursor-pointer" href="/student/profile">Profile</a>
 			<button class="specialBtn" on:click={handleSignOut}><p>Logout</p></button>
         </nav>
     </div>
@@ -32,7 +35,7 @@
 <main class="max-w-4xl mx-auto mt-12 px-4">
 	<div class="flex flex-row justify-between">
 		<div>
-			<p class="font-bold text-2xl">Your Reports</p>
+			<p class="font-bold text-2xl">Your Ranking</p>
 			<p class="text-sm font-semibold pb-5">Total : {reports?.length}</p>
 		</div>
 	</div>

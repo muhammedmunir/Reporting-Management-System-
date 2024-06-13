@@ -4,6 +4,7 @@
 	import type { PageData } from '../../contractor/$types';
 	
 	export let data: PageData;
+	let reports = data.reports;
 	let { supabase, session } = data;
 	$: ({ supabase, session } = data);
 
@@ -27,6 +28,9 @@
 			<a class="duration-200 hover:text-indigo-400 cursor-pointer" href="/admin/complete">Completed Reports</a>
             <a class="duration-200 hover:text-indigo-400 cursor-pointer" href="/admin/students">Ranking Students</a>
 			<a class="duration-200 hover:text-indigo-400 cursor-pointer" href="/admin/contractors">Ranking Contractors</a>
+			<a class="duration-200 hover:text-indigo-400 cursor-pointer" href="/admin/coupons">List Coupons</a>
+			<a class="duration-200 hover:text-indigo-400 cursor-pointer" href="/admin/register-contractor">Contractor Register</a>
+			<a class="duration-200 hover:text-indigo-400 cursor-pointer" href="/admin/profile">Profile</a>
 			<button class="specialBtn" on:click={handleSignOut}><p>Logout</p></button>
         </nav>
     </div>
@@ -44,14 +48,20 @@
 			<thead class="bg-gray-200">
 				<tr>
 					<th class="py-2 px-4 border">No</th>
-					<th class="py-2 px-4 border">Name</th>
+					<th class="py-2 px-4 border">Username</th>
+					<th class="py-2 px-4 border">Full Name</th>
+					<th class="py-2 px-4 border">No. CIDB</th>
+					<th class="py-2 px-4 border">Obtained Points</th>
 				</tr>
 			</thead>
 			<tbody class="divide-y divide-gray-200">
-				{#each data.reports as _, index}
+				{#each reports as _, index}
 					<tr class="hover:bg-gray-100">
 						<td class="py-2 px-4 border">{index + 1}</td>
 						<td class="py-2 px-4 border">{_.username}</td>
+						<td class="py-2 px-4 border">{_.full_name}</td>
+						<td class="py-2 px-4 border">{_.matrikID}</td>
+						<td class="py-2 px-4 border">{_.points}</td>
 					</tr>
 				{/each}
 			</tbody>
