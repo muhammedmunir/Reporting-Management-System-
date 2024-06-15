@@ -1,7 +1,8 @@
 <script lang="ts">
-    import { onMount } from 'svelte';
     import type { PageData } from './$types';
     import { goto } from '$app/navigation';
+  import Sectionwrapper from '../component/sectionwrapper.svelte';
+  import Headers from '../component/header.svelte';
 
     export let data: PageData;
     const { supabase, session, claimedCoupons } = data;
@@ -69,47 +70,30 @@
         goto('/login', { replaceState: true });
     };
 </script>
-  
-<header class="flex flex-col relative z-20">
-    <div class="max-w-[1400px] mx-auto w-full flex items-center justify-between p-4 py-6">
-        <a href="/student">
-            <h1 class="font-semibold">UTM<span class="text-indigo-400">Complaint</span></h1>
-        </a>
-        <button class="md:hidden grid place-items-center">
-            <i class="fa-solid fa-bars"></i>
-        </button>
-        <nav class="md:flex items-center gap-4 lg:gap-6">
-            <a class="duration-200 hover:text-indigo-400 cursor-pointer" href="/student/report-form">Make Report</a>
-            <a class="duration-200 hover:text-indigo-400 cursor-pointer" href="/student/form-reports">View Reports</a>
-            <a class="duration-200 hover:text-indigo-400 cursor-pointer" href="/student/ranking">View Ranking</a>
-            <a class="duration-200 hover:text-indigo-400 cursor-pointer" href="/student/coupons">Shop Coupon</a>
-            <a class="duration-200 hover:text-indigo-400 cursor-pointer" href="/student/coupon">My Coupon</a>
-            <a class="duration-200 hover:text-indigo-400 cursor-pointer" href="/student/profile">Profile</a>
-            <button class="specialBtn" on:click={handleSignOut}><p>Logout</p></button>
-        </nav>
-    </div>
-</header>
 
-<main class="register flex flex-col justify-center items-center">
-    <section class="min-h-screen flex flex-col px-4">
-        <div class="flex flex-col flex-1 max-w-[1400px] mx-auto w-full">
-            <h2 class="text-2xl font-bold mb-6">Claimed Coupons</h2>
-            <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-                {#each claimedCoupons as claimedCoupon}
-                    {#if !claimedCoupon.used}
-                        <div class="border p-4 rounded-lg shadow-sm hover:shadow-md">
-                            <h3 class="font-semibold text-lg">{claimedCoupon.coupons.title}</h3>
-                            <p class="mt-2">{formatDate(claimedCoupon.coupons.description)}</p>
-                            <p class="mt-2">Price: RM{claimedCoupon.coupons.price.toFixed(2)}</p>
-                            <p class="mt-2">Claimed at: {new Date(claimedCoupon.claimed_at).toLocaleString()}</p>
-                            <button class="mt-4 bg-indigo-500 text-white px-4 py-2 rounded hover:bg-indigo-400"
-                                    on:click={() => handleUseCoupon(claimedCoupon.id, claimedCoupon.coupon_id)}>
-                                Use Coupon
-                            </button>
-                        </div>
-                    {/if}
-                {/each}
+<Sectionwrapper>
+    <Headers { data } />
+    <div class="flex flex-col gap-10 flex-1 items-center justify-center pb-10 md:pb-14">
+        <h2 class="text-3xl sm:text-1xl md:text-2xl lg:text-3xl max-w-[1200px] mx-auto w-full text-center font-semibold">Claimed Coupons</h2>
+        <section class="min-h-screen flex flex-col px-4">
+            <div class="flex flex-col flex-1 max-w-[1400px] mx-auto w-full">
+                <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                    {#each claimedCoupons as claimedCoupon}
+                        {#if !claimedCoupon.used}
+                            <div class="border p-4 rounded-lg shadow-sm hover:shadow-md">
+                                <h3 class="font-semibold text-lg">{claimedCoupon.coupons.title}</h3>
+                                <p class="mt-2">{formatDate(claimedCoupon.coupons.description)}</p>
+                                <p class="mt-2">Price: RM{claimedCoupon.coupons.price.toFixed(2)}</p>
+                                <p class="mt-2">Claimed at: {new Date(claimedCoupon.claimed_at).toLocaleString()}</p>
+                                <button class="mt-4 px-4 py-2 rounded specialBtnDark hover:bg-red-900"
+                                        on:click={() => handleUseCoupon(claimedCoupon.id, claimedCoupon.coupon_id)}>
+                                    Use Coupon
+                                </button>
+                            </div>
+                        {/if}
+                    {/each}
+                </div>
             </div>
-        </div>
-    </section>
-</main>
+        </section>
+    </div>
+</Sectionwrapper>

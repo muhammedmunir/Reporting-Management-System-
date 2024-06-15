@@ -1,6 +1,7 @@
 <script>
 	import { goto, invalidateAll } from '$app/navigation';
-	import logo1 from '$lib/img/logo1.png';
+	import Sectionwrapper from '../component/sectionwrapper.svelte';
+    import Header from "../component/header.svelte";
 
 	export let data;
 	let { supabase, session } = data;
@@ -8,6 +9,7 @@
 
 	let email = '';
 	let password = '';
+	let confirmPassword = '';
 	let username = '';
 	let matrikID = '';
 	let full_name = '';
@@ -16,123 +18,214 @@
 	let role = 'student';
 	let phone = '';
 
+	let errors = {
+		email: '',
+		password: '',
+		confirmPassword: '',
+		username: '',
+		matrikID: '',
+		full_name: '',
+		phone: ''
+	};
+
+	const validateForm = () => {
+		let isValid = true;
+		errors = {
+			email: '',
+			password: '',
+			confirmPassword: '',
+			username: '',
+			matrikID: '',
+			full_name: '',
+			phone: ''
+		};
+
+		if (!email) {
+			errors.email = 'Email is required';
+			isValid = false;
+		}
+		if (!password) {
+			errors.password = 'Password type is required';
+			isValid = false;
+		}
+		if (!confirmPassword) {
+			errors.confirmPassword = 'Confirm Password is required';
+			isValid = false;
+		}
+		if (!username) {
+			errors.username = 'Username type is required';
+			isValid = false;
+		}
+		if (!matrikID) {
+			errors.matrikID = 'Matric is required';
+			isValid = false;
+		}
+		if (!full_name) {
+			errors.full_name = 'Full Name type is required';
+			isValid = false;
+		}
+		if (!phone) {
+			errors.phone = 'Phone type is required';
+			isValid = false;
+		}
+		return isValid;
+	};
+
 	const handleSignIn = async () => {
-		if (email !== '' && password !== '' && username !== '' && matrikID !== '' && full_name !== '' && phone !== '') {
+
+		if (!validateForm()) {
+			console.error('Register validation failed');
+			return;
+		}
+
+		if (email !== '' && password !== '' && confirmPassword !== '' && username !== '' && matrikID !== '' && full_name !== '' && phone !== '') {
+			if (password !== confirmPassword) {
+				errorMessage = 'Passwords do not match';
+				return;
+			}
+
 			loading = true;
+
+			// Check if email already exists
+			const { data: existingUsers, error: checkError } = await supabase
+				.from('profiles')
+				.select('email')
+				.eq('email', email);
+
+			if (checkError) {
+				errorMessage = checkError.message;
+				loading = false;
+				return;
+			}
+
+			if (existingUsers.length > 0) {
+				errorMessage = 'Email already in use';
+				loading = false;
+				return;
+			}
+
 			const { data, error } = await supabase.auth.signUp({
 				email,
 				password
 			});
+
 			if (!error) {
 				errorMessage = '';
 				await supabase
 					.from('profiles')
-					.update({ username, full_name, matrikID, role, phone })
-					.eq('id', data.session?.user.id);
-				goto('/student');
+					.update({ username, full_name, matrikID, role, phone, email })
+					.eq('id', data.user.id);
+				goto('/login');
 			} else {
-				errorMessage = error?.message;
+				errorMessage = error.message;
 			}
 		} else {
-			errorMessage = 'Please fill all';
+			errorMessage = 'Please fill all fields';
 		}
 		loading = false;
 	};
 </script>
 
-<main class="register flex flex-col justify-center items-center">
-		<h1 class="text-3xl font-bold mb-2">Student Register</h1>
+<Sectionwrapper>
+	<Header />
+	<div class="flex flex-col gap-10 flex-1 items-center justify-center pb-10 md:pb-14">
+		<h2 class="text-3xl sm:text-2xl md:text-3xl lg:text-4xl max-w-[1200px] mx-auto w-full text-center font-semibold">Student Register</h2>
 		<form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
 			<div class="mb-6">
-				<div class="label">
-					<span class="block text-gray-700 text-sm font-bold mb-2">Email</span>
-				</div>
+				<label class="block text-gray-700 text-sm font-bold mb-2 max-w-[1000px]" for="email">Email</label>
 				<input
 					type="email"
 					id="email"
 					bind:value={email}
 					placeholder="Type your email here"
-					class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus: shadow-outline"
+					class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
 				/>
+				{#if errors.email}<p class="text-red-500 text-xs italic">{errors.email}</p>{/if}
 			</div>
 
 			<div class="mb-6">
-				<div class="label">
-					<span class="block text-gray-700 text-sm font-bold mb-2">Username</span>
-				</div>
+				<label class="block text-gray-700 text-sm font-bold mb-2 max-w-[1000px]" for="username">Username</label>
 				<input
+					id="username"
 					bind:value={username}
 					placeholder="Type your username here"
-					class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus: shadow-outline"
+					class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
 				/>
+				{#if errors.username}<p class="text-red-500 text-xs italic">{errors.username}</p>{/if}
 			</div>
 
 			<div class="mb-6">
-				<div class="label">
-					<span class="block text-gray-700 text-sm font-bold mb-2">Full Name</span>
-				</div>
+				<label class="block text-gray-700 text-sm font-bold mb-2 max-w-[1000px]" for="full_name">Full Name</label>
 				<input
+					id="full_name"
 					bind:value={full_name}
 					placeholder="Type your Full Name here"
-					class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus: shadow-outline"
+					class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
 				/>
+				{#if errors.full_name}<p class="text-red-500 text-xs italic">{errors.full_name}</p>{/if}
 			</div>
 
 			<div class="mb-6">
-				<div class="label">
-					<span class="block text-gray-700 text-sm font-bold mb-2">Kad Matrik</span>
-				</div>
+				<label class="block text-gray-700 text-sm font-bold mb-2 max-w-[1000px]" for="matrikID">No. Matric</label>
 				<input
+					id="matrikID"
 					bind:value={matrikID}
 					placeholder="Type your Kad Matrik here"
-					class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus: shadow-outline"
+					class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
 				/>
+				{#if errors.matrikID}<p class="text-red-500 text-xs italic">{errors.matrikID}</p>{/if}
 			</div>
 
 			<div class="mb-6">
-				<div class="label">
-					<span class="block text-gray-700 text-sm font-bold mb-2">No. Phone</span>
-				</div>
+				<label class="block text-gray-700 text-sm font-bold mb-2 max-w-[1000px]" for="phone">No. Phone</label>
 				<input
+					id="phone"
 					bind:value={phone}
 					placeholder="Type your No. Phone here"
-					class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus: shadow-outline"
+					class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
 				/>
+				{#if errors.phone}<p class="text-red-500 text-xs italic">{errors.phone}</p>{/if}
 			</div>
 
 			<div class="mb-6">
-				<div class="label">
-					<span class="block text-gray-700 text-sm font-bold mb-2">Password</span>
-				</div>
+				<label class="block text-gray-700 text-sm font-bold mb-2 max-w-[1000px]" for="password">Password</label>
 				<input
 					type="password"
 					id="password"
 					bind:value={password}
 					placeholder="Type your password here"
-					class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus: shadow-outline"
+					class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
 				/>
-				<p class="text-center mt-2 text-lg text-error text-red-600">{errorMessage}</p>
+				{#if errors.password}<p class="text-red-500 text-xs italic">{errors.password}</p>{/if}
 			</div>
+
+			<div class="mb-6">
+				<label class="block text-gray-700 text-sm font-bold mb-2 max-w-[1000px]" for="confirmPassword">Confirm Password</label>
+				<input
+					type="password"
+					id="confirmPassword"
+					bind:value={confirmPassword}
+					placeholder="Confirm your password"
+					class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+				/>
+				{#if errors.confirmPassword}<p class="text-red-500 text-xs italic">{errors.confirmPassword}</p>{/if}
+			</div>
+
+			<p class="text-red-500 text-center text-xs italic">{errorMessage}</p>
 
 			<div class="flex items-center justify-center">
 				<button
 					disabled={loading}
 					on:click={handleSignIn}
 					id="login-button"
-					class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none sm:px-20"
+					class="specialBtnDark hover:bg-red-900 py-2 px-4 rounded focus:outline-none sm:px-20"
 					>Register</button
 				>
 			</div>
 
 			<div class="flex items-center justify-center">
-				<a class="duration-200 hover:text-indigo-400 cursor-pointer py-2 px-4" href="/">Back</a>
+				<a class="duration-200 hover:text-red-400 cursor-pointer py-2 px-4" href="/">Back</a>
 			</div>
 		</form>
-	<!--</div>-->
-</main>
-
-<section class={"min-h-screen flex flex-col px-4"}>
-    <dev class="flex flex-col flex-1 max-w-[1400px] mx-auto w-full">
-        <slot/>
-    </dev>
-</section>
+	</div>
+</Sectionwrapper>

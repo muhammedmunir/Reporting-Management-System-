@@ -1,25 +1,21 @@
-<header class="flex flex-col relative z-20">
-    <div class="max-w-[1400px] mx-auto w-full flex items-center justify-between p-4 py-6">
-        <a href="/">
-            <h1 class="font-semibold">UTM<span class="text-indigo-400">Complaint</span></h1>
-        </a>
-        <button class="md:hidden grid place-items-center">
-            <i class="fa-solid fa-bars"></i>
-        </button>
-        <nav class="md:flex items-center gap-4 lg:gap-6">
-            <a class="duration-200 hover:text-indigo-400 cursor-pointer" href="/register-student">Student Register</a>
-			<a class="duration-200 hover:text-indigo-400 cursor-pointer" href="/apply-register">Apply Contractor</a>
-            <button class="specialBtn"><a href="/login">Login</a></button>
-        </nav>
-    </div>
-</header>
+<script>
+    import Sectionwrapper from "./component/sectionwrapper.svelte";
+    import Header from "./component/header.svelte";
+    
+    function reroute(href) {
+		window.location.href = href;
+    };
+</script>
 
-<main class="max-w-4xl mx-auto mt-12 px-4">
-	<h1 class="text-center text-3xl font-bold mb-4">Welcome to Campus Defect Reporting Management System</h1>
-</main>
-
-<section class={"min-h-screen flex flex-col px-4"}>
-    <dev class="flex flex-col flex-1 max-w-[1400px] mx-auto w-full">
-        <slot/>
-    </dev>
-</section>
+<Sectionwrapper>
+    <Header />	
+        <div class="flex flex-col gap-10 flex-1 items-center justify-center pb-10 md:pb-14">
+            <h2 class="text-5xl sm:text-6xl md:text-7xl lg:text-8xl max-w-[1200px] mx-auto w-full text-center font-semibold">Welcome <span class="text-red-900">To</span> Campus <span class="text-red-800">Defect</span> Reporting <span class="text-red-700">Management</span> System</h2>
+            <p class="text-xl sm:text-2xl md:text-3xl text-center max-w-[1000px] mx-auto w-full">Students can <span class="italic">easily</span> make reports in college.</p>
+            <div class="flex items-center gap-4">
+                <button on:click={ () => reroute("/login")} class="specialBtn">
+                    <p class="text-base sm:text-lg md:text-xl">Login &rarr;</p>
+                </button>
+            </div>
+        </div>   
+</Sectionwrapper>

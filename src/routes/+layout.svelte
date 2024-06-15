@@ -1,7 +1,9 @@
 <script lang="ts">
-	import type { LayoutData } from './$types';
 	import '../app.css';
-	export let data: LayoutData;
+	import Footer from './component/footer.svelte';
+
 </script>
 
 <slot />
+
+<Footer />
