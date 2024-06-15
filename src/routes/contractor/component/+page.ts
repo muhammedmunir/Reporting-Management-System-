@@ -2,11 +2,11 @@ import type { PageLoad } from './$types';
 
 export const load = (async ({ parent, url }) => {
 	const { supabase, session } = await parent();
-	const { data: reports } = await supabase
+	const { data: user_profile } = await supabase
 		.from('profiles')
 		.select(`*`)
-		.eq('role', 'student')
-		.order('points', { ascending: false });
+		.eq('id', session?.user.id)
+		.single();
 
-	return { reports };
+	return { user_profile };
 }) satisfies PageLoad;

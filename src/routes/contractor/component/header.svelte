@@ -30,19 +30,16 @@
         </button>
     </div>
     <div class="flex flex-col gap-4 flex-1">
-        <button on:click={ () => reroute("/student/report-form")} class="border-none outline-none p-2 group duration-200 cursor-pointer text-left">
-            <p class="duration-200 group-hover:pl-2 poppins text-2xl font-semibold">Make Report <i class="fa-solid fa-chevron-right text-xl pl-4" /></p>
-        </button>
-        <button on:click={ () => reroute("/student/form-reports")} class="border-none outline-none p-2 group duration-200 cursor-pointer text-left">
+        <button on:click={ () => reroute("/contractor/reports")} class="border-none outline-none p-2 group duration-200 cursor-pointer text-left">
             <p class="duration-200 group-hover:pl-2 poppins text-2xl font-semibold">View Reports <i class="fa-solid fa-chevron-right text-xl pl-4" /></p>
         </button>
-        <button on:click={ () => reroute("/student/coupons")} class="border-none outline-none p-2 group duration-200 cursor-pointer text-left">
-            <p class="duration-200 group-hover:pl-2 poppins text-2xl font-semibold">Shop Coupon <i class="fa-solid fa-chevron-right text-xl pl-4" /></p>
+        <button on:click={ () => reroute("/contractor/taken-reports")} class="border-none outline-none p-2 group duration-200 cursor-pointer text-left">
+            <p class="duration-200 group-hover:pl-2 poppins text-2xl font-semibold">Taken Reports <i class="fa-solid fa-chevron-right text-xl pl-4" /></p>
         </button>
-        <button on:click={ () => reroute("/student/coupon")} class="border-none outline-none p-2 group duration-200 cursor-pointer text-left">
-            <p class="duration-200 group-hover:pl-2 poppins text-2xl font-semibold">My Coupon <i class="fa-solid fa-chevron-right text-xl pl-4" /></p>
+        <button on:click={ () => reroute("/contractor/donejob")} class="border-none outline-none p-2 group duration-200 cursor-pointer text-left">
+            <p class="duration-200 group-hover:pl-2 poppins text-2xl font-semibold">Done Job <i class="fa-solid fa-chevron-right text-xl pl-4" /></p>
         </button>
-        <button on:click={ () => reroute("/student/profile")} class="border-none outline-none p-2 group duration-200 cursor-pointer text-left">
+        <button on:click={ () => reroute("/contractor/profile")} class="border-none outline-none p-2 group duration-200 cursor-pointer text-left">
             <p class="duration-200 group-hover:pl-2 poppins text-2xl font-semibold">Profile <i class="fa-solid fa-chevron-right text-xl pl-4" /></p>
         </button>
     </div>
@@ -58,18 +55,17 @@
 <div class="bg-white fixed top-0 left-0 w-full flex flex-col z-20 px-4 fadeIn">
     <header class="flex flex-col relative z-20">
         <div class="max-w-[1400px] mx-auto w-full flex items-center justify-between p-4 py-6">
-            <a href="/student">
+            <a href="/contractor">
                 <h1 class="font-semibold">UTM<span class="text-red-700">Complaint</span></h1>
             </a>
             <button on:click={ () => ($openModal = true) } class="md:hidden grid place-items-center">
                 <i class="fa-solid fa-bars" />
             </button>
             <nav class="hidden md:flex items-center gap-4 lg:gap-6">
-                <a class="duration-200 hover:text-red-700 cursor-pointer" href="/student/report-form">Make Report</a>
-                <a class="duration-200 hover:text-red-700 cursor-pointer" href="/student/form-reports">View Reports</a>
-                <a class="duration-200 hover:text-red-700 cursor-pointer" href="/student/coupons">Shop Coupon</a>
-                <a class="duration-200 hover:text-red-700 cursor-pointer" href="/student/coupon">My Coupon</a>
-                <a class="duration-200 hover:text-red-700 cursor-pointer" href="/student/profile">Profile</a>
+                <a class="duration-200 hover:text-red-400 cursor-pointer" href="/contractor/reports">View Reports</a>
+                <a class="duration-200 hover:text-red-400 cursor-pointer" href="/contractor/taken-reports">Taken Reports</a>
+                <a class="duration-200 hover:text-red-400 cursor-pointer" href="/contractor/donejob">Done Job</a>
+                <a class="duration-200 hover:text-red-400 cursor-pointer" href="/contractor/profile">Profile</a>
                 <button class="specialBtn" on:click={handleSignOut}><p>Logout</p></button>
             </nav>
         </div>
@@ -79,18 +75,17 @@
 
 <header class="flex flex-col relative z-20">
     <div class="max-w-[1400px] mx-auto w-full flex items-center justify-between p-4 py-6">
-        <a href="/student">
+        <a href="/contractor">
             <h1 class="font-semibold">UTM<span class="text-red-700">Complaint</span></h1>
         </a>
         <button on:click={ () => ($openModal = true) } class="md:hidden grid place-items-center">
             <i class="fa-solid fa-bars" />
         </button>
         <nav class="hidden md:flex items-center gap-4 lg:gap-6">
-            <a class="duration-200 hover:text-red-700 cursor-pointer" href="/student/report-form">Make Report</a>
-			<a class="duration-200 hover:text-red-700 cursor-pointer" href="/student/form-reports">View Reports</a>
-            <a class="duration-200 hover:text-red-700 cursor-pointer" href="/student/coupons">Shop Coupon</a>
-            <a class="duration-200 hover:text-red-700 cursor-pointer" href="/student/coupon">My Coupon</a>
-			<a class="duration-200 hover:text-red-700 cursor-pointer" href="/student/profile">Profile</a>
+            <a class="duration-200 hover:text-red-400 cursor-pointer" href="/contractor/reports">View Reports</a>
+			<a class="duration-200 hover:text-red-400 cursor-pointer" href="/contractor/taken-reports">Taken Reports</a>
+			<a class="duration-200 hover:text-red-400 cursor-pointer" href="/contractor/donejob">Done Job</a>
+			<a class="duration-200 hover:text-red-400 cursor-pointer" href="/contractor/profile">Profile</a>
 			<button class="specialBtn" on:click={handleSignOut}><p>Logout</p></button>
         </nav>
     </div>

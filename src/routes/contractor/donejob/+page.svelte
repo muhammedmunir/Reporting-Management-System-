@@ -1,7 +1,8 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import { invalidate } from '$app/navigation';
 	import type { PageData } from './$types';
+	import Sectionwrapper from '../component/sectionwrapper.svelte';
+    import Headers from '../component/header.svelte';
 
 	export let data: PageData;
 	let { supabase, session } = data;
@@ -13,89 +14,52 @@
 	};
 
 	const handlereportdetail = async (id: any) => {
-		goto(`/contractor/reports/${id}`);
+		goto(`/contractor/donejob/${id}`);
 	};
 </script>
 
-<header class="flex flex-col relative z-20">
-    <div class="max-w-[1400px] mx-auto w-full flex items-center justify-between p-4 py-6">
-        <a href="/contractor">
-            <h1 class="font-semibold">UTM<span class="text-indigo-400">Complaint</span></h1>
-        </a>
-        <button class="md:hidden grid place-items-center">
-            <i class="fa-solid fa-bars"></i>
-        </button>
-        <nav class="md:flex items-center gap-4 lg:gap-6">
-            <a class="duration-200 hover:text-indigo-400 cursor-pointer" href="/contractor/reports">View Reports</a>
-			<a class="duration-200 hover:text-indigo-400 cursor-pointer" href="/contractor/taken-reports">Taken Reports</a>
-			<a class="duration-200 hover:text-indigo-400 cursor-pointer" href="/contractor/donejob">Done Job</a>
-            <a class="duration-200 hover:text-indigo-400 cursor-pointer" href="/contractor/ranking">View Ranking</a>
-			<a class="duration-200 hover:text-indigo-400 cursor-pointer" href="/contractor/coupons">Shop Coupon</a>
-			<a class="duration-200 hover:text-indigo-400 cursor-pointer" href="/contractor/coupon">My Coupon</a>
-			<a class="duration-200 hover:text-indigo-400 cursor-pointer" href="/contractor/profile">Profile</a>
-			<button class="specialBtn" on:click={handleSignOut}><p>Logout</p></button>
-        </nav>
-    </div>
-</header>
-
-<main class="max-w-4xl mx-auto mt-12 px-4">
-	<div class="flex flex-row justify-between">
-		<div>
-			<p class="font-bold text-2xl">Done Job</p>
-			<p class="text-sm font-semibold pb-5">Total : {data.reports?.length}</p>
+<Sectionwrapper>
+    <Headers { data } />
+    <div class="flex flex-col gap-10 flex-1 items-center justify-center pb-10 md:pb-14">
+		<h2 class="text-3xl sm:text-2xl md:text-3xl lg:text-4xl max-w-[1200px] mx-auto w-full text-center font-semibold">Done Job</h2>
+		<div class="overflow-x-auto">
+			<div class="flex flex-row justify-between">
+				<div>
+					<p class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-full text-center font-semibold">Total : {data.reports?.length}</p>
+				</div>
+			</div>
+			<table class="w-full border-collapse">
+				<thead class="bg-gray-200">
+					<tr>
+						<th class="py-1 px-1 border"><p class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-full text-center font-semibold">No</p></th>
+						<th class="py-1 px-1 border"><p class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-full text-center font-semibold">Kolej</p></th>
+						<th class="py-1 px-1 border"><p class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-full text-center font-semibold">Defect Type</p></th>
+						<th class="py-1 px-1 border"><p class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-full text-center font-semibold">Place</p></th>
+						<th class="py-1 px-1 border"><p class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-full text-center font-semibold">Description</p></th>
+						<th class="py-1 px-1 border">Options</th>
+					</tr>
+				</thead>
+				<tbody class="divide-y divide-gray-200">
+					{#each data.reports as _, index}
+						<tr class="hover:bg-gray-100">
+							<td class="py-1 px-1 border"><p class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-full text-center">{index + 1}</p></td>
+							<td class="py-1 px-1 border"><p class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-full text-center">{_.kolej}</p></td>
+							<td class="py-1 px-1 border"><p class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-full text-center">{_.defecttype}</p></td>
+							<td class="py-1 px-1 border"><p class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-full text-center">{_.place}</p></td>
+							<td class="py-1 px-1 border"><p class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-full text-center">{_.description}</p></td>
+							<td class="py-1 px-1 border">
+								<div class="flex flex-col">
+									<button
+										on:click={() => handlereportdetail(_.id)}
+										class="specialBtn"
+										><p class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-full text-center">Detail</p></button
+									>
+								</div>
+							</td>
+						</tr>
+					{/each}
+				</tbody>
+			</table>
 		</div>
 	</div>
-	<div class="overflow-x-auto">
-		<table class="w-full border-collapse">
-			<thead class="bg-gray-200">
-				<tr>
-					<th class="py-2 px-2 border">No</th>
-					<th class="py-2 px-2 border">Kolej</th>
-					<th class="py-2 px-2 border">Description</th>
-					<th class="py-2 px-2 border">Images</th>
-					<th class="py-2 px-2 border">Status</th>
-					<th class="py-2 px-2 border">Options</th>
-				</tr>
-			</thead>
-			<tbody class="divide-y divide-gray-200">
-				{#each data.reports as _, index}
-					<tr class="hover:bg-gray-100">
-						<td class="py-2 px-2 border">{index + 1}</td>
-						<td class="py-2 px-2 border">{_.kolej}</td>
-						<td class="py-2 px-2 border">{_.description}</td>
-						<td class="py-2 px-2 border">
-							{#each _.images as childnode, index}
-								<div class="flex flex-col">
-									<p class="text-sm font-medium">Image {index + 1}</p>
-									<div class="">
-										<img
-											width="150"
-											src={supabase.storage.from('').getPublicUrl(childnode).data.publicUrl}
-											alt="gmabnar"
-										/>
-									</div>
-								</div>
-							{/each}
-						</td>
-						<td class="py-2 px-2 border">{_.status}</td>
-						<td class="py-2 px-2 border">
-							<div class="flex flex-col">
-								<button
-									on:click={() => handlereportdetail(_.id)}
-									class="bg-green-500 hover:bg-green-700 text-white"
-									>Detail</button
-								>
-							</div>
-						</td>
-					</tr>
-				{/each}
-			</tbody>
-		</table>
-	</div>
-</main>
-
-<section class={"min-h-screen flex flex-col px-4"}>
-    <dev class="flex flex-col flex-1 max-w-[1400px] mx-auto w-full">
-        <slot/>
-    </dev>
-</section>
+</Sectionwrapper>

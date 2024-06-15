@@ -29,32 +29,32 @@
 		<div class="overflow-x-auto">
 			<div class="flex flex-row justify-between">
 				<div>
-					<p class="text-sm font-semibold pb-5">Total : {reports?.length}</p>
+					<p class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-full text-center font-semibold">Total : {reports?.length}</p>
 				</div>
 				<div class="p-2">
-					<button on:click={ () => reroute("/student/report-form")} class="specialBtnDark hover:bg-red-900">Make Report</button>
+					<button on:click={ () => reroute("/student/report-form")} class="specialBtnDark hover:bg-red-900"><p class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-full text-center font-semibold">Make Report</p></button>
 				</div>
 			</div>
 			<table class="w-full border-collapse">
 				<thead class="bg-gray-200">
 					<tr>
-						<th class="py-2 px-4 border">No</th>
-						<th class="py-2 px-4 border">Kolej</th>
-						<th class="py-2 px-4 border">Place</th>
-						<th class="py-2 px-4 border">Description</th>
-						<th class="py-2 px-4 border">Status</th>
-						<th class="py-2 px-4 border">Options</th>
+						<th class="py-1 px-1 border"><p class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-full text-center font-semibold">No</p></th>
+						<th class="py-1 px-1 border"><p class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-full text-center font-semibold">Kolej</p></th>
+						<th class="py-1 px-1 border"><p class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-full text-center font-semibold">Place</p></th>
+						<th class="py-1 px-1 border"><p class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-full text-center font-semibold">Description</p></th>
+						<th class="py-1 px-1 border"><p class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-full text-center font-semibold">Status</p></th>
+						<th class="py-1 px-1 border"><p class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-full text-center font-semibold">Options</p></th>
 					</tr>
 				</thead>
 				<tbody class="divide-y divide-gray-200">
 					{#each data.reports as _, index}
 						<tr class="hover:bg-gray-100">
-							<td class="py-2 px-4 border">{index + 1}</td>
-							<td class="py-2 px-4 border">{_.kolej}</td>
-							<td class="py-2 px-4 border">{_.place}</td>
-							<td class="py-2 px-4 border">{_.description}</td>
-							<td class="py-2 px-4 border">{_.status}</td>
-							<td class="py-2 px-4 border">
+							<td class="py-1 px-1 border"><p class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-full text-center">{index + 1}</p></td>
+							<td class="py-1 px-1 border"><p class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-full text-center">{_.kolej}</p></td>
+							<td class="py-1 px-1 border"><p class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-full text-center">{_.place}</p></td>
+							<td class="py-1 px-1 border"><p class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-full text-center">{_.description}</p></td>
+							<td class="py-1 px-1 border"><p class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-full text-center">{_.status}</p></td>
+							<td class="py-1 px-1 border">
 								{#if _.status == 'rejected'}
 								<div class="flex flex-col mb-2">
 									{#if _.status == 'rejected'}
@@ -62,7 +62,7 @@
 											on:click={() => handlereportupdate(_.id)}
 											class="border border-red-500 hover:border-red-700 bg-red p-2"
 										>
-											Edit
+										<p class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-full text-center font-semibold">Edit</p>
 									</button>
 									{:else}
 										<button 
@@ -79,14 +79,14 @@
 											on:click={() => alert(`Comment: ${_.comment}`)}
 											class="border border-red-500 hover:border-red-700 bg-red p-2"
 										>
-											Comment
+										<p class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-full text-center font-semibold">Comment</p>
 										</button>
 									{:else}
 										<button 
 											disabled
 											class="border border-gray-500 hover:border-gray-700 bg-red p-2"
 										>
-											Comment
+										<p class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-full text-center font-semibold">Comment</p>
 										</button>
 									{/if}
 								</div>
@@ -95,9 +95,9 @@
 								<div class="flex flex-col">
 										<button 
 											on:click={() => handlereportdetail(_.id)}
-											class="border border-green-500 hover:border-green-700 bg-red p-2"
+											class="specialBtn p-2"
 										>
-											Detail
+										<p class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-full text-center font-semibold">Detail</p>
 										</button>
 								</div>
 								{/if}
