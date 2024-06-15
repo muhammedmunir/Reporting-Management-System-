@@ -76,8 +76,8 @@
   
   <div id="map" style="height: 500px; width: 100%;"></div>
   
-  <!--<p>Latitude: {$latitude}</p>
-  <p>Longitude: {$longitude}</p>-->
+  <p>Latitude: {$latitude}</p>
+  <p>Longitude: {$longitude}</p>
   
   <style>
     #map {
