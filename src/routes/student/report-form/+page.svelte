@@ -19,7 +19,7 @@
 	let description = '';
 	let important = '';
 	let images: FileList | null = null;
-	let level = '';
+	let level = parseInt('');
 	let noroom = '';
 	let kolej = '';
 	let defecttype = '';
@@ -97,7 +97,7 @@
 				errors.noroom = 'No. Room is required';
 				isValid = false;
 			}
-			if (place === 'Room' && !latitude) {
+			if (place === 'Room' && !($latitude)) {
 				errors.latitude = 'Map is required';
 				isValid = false;
 			}
@@ -121,7 +121,7 @@
 				errors.level = 'Level is required';
 				isValid = false;
 			}
-			if (place === 'Toilet' && !latitude) {
+			if (place === 'Toilet' && !($latitude)) {
 				errors.latitude = 'Map is required';
 				isValid = false;
 			}
@@ -137,7 +137,7 @@
 				errors.noblock = 'No. Block is required';
 				isValid = false;
 			}
-			if (place === 'Lift' && !latitude) {
+			if (place === 'Lift' && !($latitude)) {
 				errors.latitude = 'Map is required';
 				isValid = false;
 			}
@@ -149,7 +149,7 @@
 				errors.images = 'Images are required';
 				isValid = false;
 			}
-			if (place === 'Road' && !latitude) {
+			if (place === 'Road' && !($latitude)) {
 				errors.latitude = 'Map is required';
 				isValid = false;
 			}
@@ -168,11 +168,7 @@
 				errors.noblock = 'No. Block is required';
 				isValid = false;
 			}
-			if (!level) {
-				errors.level = 'Level is required';
-				isValid = false;
-			}
-			if (!latitude) {
+			if (!($latitude)) {
 				errors.latitude = 'Map is required';
 				isValid = false;
 			}
@@ -195,7 +191,6 @@
 			console.error('Form validation failed');
 			return;
 		}
-
 		// Convert severity to number
 		//const severityNumber = parseInt(severity);
 
@@ -269,21 +264,21 @@
 		<form on:submit|preventDefault={handleSubmit} class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
 			<div class="pb-5">
 				<ul class="list-disc pl-10">
-					<li class="text-sm mb-2 text-center max-w-[1000px] mx-auto w-full">Fill the form to report</li>
+					<li class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-full text-center font-semibold">Fill the form to report</li>
 				</ul>
 			</div>
 
 			<div class="mb-6">
-				<label for="kolej" class="block text-gray-700 text-sm font-bold mb-2 max-w-[1000px]">Kolej</label>
-				<select bind:value={kolej} class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus: shadow-outline">
+				<label for="kolej" class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-full text-center font-semibold">Kolej</label>
+				<select bind:value={kolej} class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus: shadow-outline max-w-[1000px]">
 					{#each kolejoption as value}<option value={value}>{value}</option>{/each}
 				</select>
 				{#if errors.kolej}<p class="text-red-500 text-xs italic">{errors.kolej}</p>{/if}
 			</div>
 
 			<div class="mb-6">
-				<label for="defecttype" class="block text-gray-700 text-sm font-bold mb-2 max-w-[1000px]">Defect Type</label>
-				<select bind:value={defecttype} class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus: shadow-outline">
+				<label for="defecttype" class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-full text-center font-semibold">Defect Type</label>
+				<select bind:value={defecttype} class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus: shadow-outline max-w-[1000px]">
 					{#each defecttypeoption as value}<option value={value}>{value}</option>{/each}
 				</select>
 				{#if errors.defecttype}<p class="text-red-500 text-xs italic">{errors.defecttype}</p>{/if}
@@ -291,20 +286,20 @@
 
 			{#if defecttype === 'Facility Damage'}
 				<div class="mb-6">
-					<label for="place" class="block text-gray-700 text-sm font-bold mb-2 max-w-[1000px]">Place</label>
-					<label class="block text-gray-700 text-sm font-bold mb-2">
+					<label for="place" class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-full text-center font-semibold">Place</label>
+					<label class="block text-gray-700 text-sm font-bold mb-2 max-w-[1000px]">
 						<input type="radio" bind:group={place} value="Room" />
 						Room
 					</label>
-					<label class="block text-gray-700 text-sm font-bold mb-2">
+					<label class="block text-gray-700 text-sm font-bold mb-2 max-w-[1000px]">
 						<input type="radio" bind:group={place} value="Toilet" />
 						Toilet
 					</label>
-					<label class="block text-gray-700 text-sm font-bold mb-2">
+					<label class="block text-gray-700 text-sm font-bold mb-2 max-w-[1000px]">
 						<input type="radio" bind:group={place} value="Lift" />
 						Lift
 					</label>
-					<label class="block text-gray-700 text-sm font-bold mb-2">
+					<label class="block text-gray-700 text-sm font-bold mb-2 max-w-[1000px]">
 						<input type="radio" bind:group={place} value="Road" />
 						Road
 					</label>
@@ -315,43 +310,43 @@
 			{#if defecttype === 'Facility Damage' && place === 'Room'}
 				<div class="flex mb-6">
 					<div class="w-1/2 pr-2">
-						<label for="noblock" class="block text-gray-700 text-sm font-bold mb-2 max-w-[1000px]">No. Block</label>
-						<input id="noblock" type="text" bind:value={noblock} placeholder="Type your No. Block here" class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
+						<label for="noblock" class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-full text-center font-semibold">No. Block</label>
+						<input id="noblock" type="text" bind:value={noblock} placeholder="Type your No. Block here" class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline max-w-[1000px]" />
 						{#if errors.noblock}<p class="text-red-500 text-xs italic">{errors.noblock}</p>{/if}
 					</div>
 					<div class="w-1/2 pl-2">
-						<label for="level" class="block text-gray-700 text-sm font-bold mb-2 max-w-[1000px]">Level</label>
-						<input id="level" type="number" bind:value={level} placeholder="Type your Level here" class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
+						<label for="level" class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-full text-center font-semibold">Level</label>
+						<input id="level" type="number" bind:value={level} placeholder="Type your Level here" class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline max-w-[1000px]" />
 						{#if errors.level}<p class="text-red-500 text-xs italic">{errors.level}</p>{/if}
 					</div>
 				</div>
 				<div class="mb-6">
-					<label for="noroom" class="block text-gray-700 text-sm font-bold mb-2 max-w-[1000px]">No. Room</label>
-					<input id="noroom" type="text" bind:value={noroom} placeholder="Type your No. Room here" class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
+					<label for="noroom" class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-full text-center font-semibold">No. Room</label>
+					<input id="noroom" type="text" bind:value={noroom} placeholder="Type your No. Room here" class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline max-w-[1000px]" />
 					{#if errors.noroom}<p class="text-red-500 text-xs italic">{errors.noroom}</p>{/if}
 				</div>
 				<div class="mb-6">
-					<label for="map" class="block text-gray-700 text-sm font-bold mb-2 max-w-[1000px]">Map</label>
+					<label for="map" class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-full text-center font-semibold">Map</label>
 					<Map {latitude} {longitude} />
 					{#if errors.latitude}<p class="text-red-500 text-xs italic">{errors.latitude}</p>{/if}
 				</div>
 				<div class="mb-6">
-					<label for="description" class="block text-gray-700 text-sm font-bold mb-2 max-w-[1000px]">Description of the Report</label>
-					<textarea id="description" bind:value={description} placeholder="Type your Description here" class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" rows="4"></textarea>
+					<label for="description" class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-full text-center font-semibold">Description of the Report</label>
+					<textarea id="description" bind:value={description} placeholder="Type your Description here" class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline max-w-[1000px]" rows="4"></textarea>
 					{#if errors.description}<p class="text-red-500 text-xs italic">{errors.description}</p>{/if}
 				</div>
 				<div class="mb-6">
-					<label for="images" class="block text-gray-700 text-sm font-bold mb-2 max-w-[1000px]">Images</label>
-					<input type="file" id="images" bind:files={images} multiple accept="image/*" class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
+					<label for="images" class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-full text-center font-semibold">Images</label>
+					<input type="file" id="images" bind:files={images} multiple accept="image/*" class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline max-w-[1000px]" />
 					{#if errors.images}<p class="text-red-500 text-xs italic">{errors.images}</p>{/if}
 				</div>
 				<div class="mb-6">
-					<label for="important" class="block text-gray-700 text-sm font-bold mb-2 max-w-[1000px]">Important</label>
-					<label class="block text-gray-700 text-sm font-bold mb-2">
+					<label for="important" class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-full text-center font-semibold">Important</label>
+					<label class="block text-gray-700 text-sm mb-2 max-w-[1000px]">
 						<input type="radio" bind:group={important} value="Allow contractor to fix/repair without me in the room" />
 						Allow contractor to fix/repair without me in the room
 					</label>
-					<label class="block text-gray-700 text-sm font-bold mb-2">
+					<label class="block text-gray-700 text-sm mb-2 max-w-[1000px]">
 						<input type="radio" bind:group={important} value="Please contact me before fix / repair" />
 						Please contact me before fix / repair
 					</label>
@@ -362,29 +357,29 @@
 			{#if defecttype === 'Facility Damage' && place === 'Toilet'}
 				<div class="flex mb-6">
 					<div class="w-1/2 pr-2">
-						<label for="noblock" class="block text-gray-700 text-sm font-bold mb-2 max-w-[1000px]">No. Block</label>
-						<input id="noblock" type="text" bind:value={noblock} placeholder="Type your No. Block here" class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
+						<label for="noblock" class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-full text-center font-semibold">No. Block</label>
+						<input id="noblock" type="text" bind:value={noblock} placeholder="Type your No. Block here" class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline max-w-[1000px]" />
 						{#if errors.noblock}<p class="text-red-500 text-xs italic">{errors.noblock}</p>{/if}
 					</div>
 					<div class="w-1/2 pl-2">
-						<label for="level" class="block text-gray-700 text-sm font-bold mb-2 max-w-[1000px]">Level</label>
-						<input id="level" type="number" bind:value={level} placeholder="Type your Level here" class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
+						<label for="level" class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-full text-center font-semibold">Level</label>
+						<input id="level" type="number" bind:value={level} placeholder="Type your Level here" class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline max-w-[1000px]" />
 						{#if errors.level}<p class="text-red-500 text-xs italic">{errors.level}</p>{/if}
 					</div>
 				</div>
 				<div class="mb-6">
-					<label for="map" class="block text-gray-700 text-sm font-bold mb-2 max-w-[1000px]">Map</label>
+					<label for="map" class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-full text-center font-semibold">Map</label>
 					<Map {latitude} {longitude} />
 					{#if errors.latitude}<p class="text-red-500 text-xs italic">{errors.latitude}</p>{/if}
 				</div>
 				<div class="mb-6">
-					<label for="description" class="block text-gray-700 text-sm font-bold mb-2 max-w-[1000px]">Description of the Report</label>
-					<textarea id="description" bind:value={description} placeholder="Type your Description here" class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" rows="4"></textarea>
+					<label for="description" class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-full text-center font-semibold">Description of the Report</label>
+					<textarea id="description" bind:value={description} placeholder="Type your Description here" class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline max-w-[1000px]" rows="4"></textarea>
 					{#if errors.description}<p class="text-red-500 text-xs italic">{errors.description}</p>{/if}
 				</div>
 				<div class="mb-6">
-					<label for="images" class="block text-gray-700 text-sm font-bold mb-2 max-w-[1000px]">Images</label>
-					<input type="file" id="images" bind:files={images} multiple accept="image/*" class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
+					<label for="images" class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-full text-center font-semibold">Images</label>
+					<input type="file" id="images" bind:files={images} multiple accept="image/*" class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline max-w-[1000px]" />
 					{#if errors.images}<p class="text-red-500 text-xs italic">{errors.images}</p>{/if}
 				</div>
 			{/if}
@@ -392,42 +387,42 @@
 			{#if defecttype === 'Facility Damage' && place === 'Lift'}
 				<div class="flex mb-6">
 					<div class="w-1/2 pr-2">
-						<label for="noblock" class="block text-gray-700 text-sm font-bold mb-2 max-w-[1000px]">No. Block</label>
-						<input id="noblock" type="text" bind:value={noblock} placeholder="Type your No. Block here" class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
+						<label for="noblock" class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-full text-center font-semibold">No. Block</label>
+						<input id="noblock" type="text" bind:value={noblock} placeholder="Type your No. Block here" class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline max-w-[1000px]" />
 						{#if errors.noblock}<p class="text-red-500 text-xs italic">{errors.noblock}</p>{/if}
 					</div>
 				</div>
 				<div class="mb-6">
-					<label for="map" class="block text-gray-700 text-sm font-bold mb-2 max-w-[1000px]">Map</label>
+					<label for="map" class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-full text-center font-semibold">Map</label>
 					<Map {latitude} {longitude} />
 					{#if errors.latitude}<p class="text-red-500 text-xs italic">{errors.latitude}</p>{/if}
 				</div>
 				<div class="mb-6">
-					<label for="description" class="block text-gray-700 text-sm font-bold mb-2 max-w-[1000px]">Description of the Report</label>
-					<textarea id="description" bind:value={description} placeholder="Type your Description here" class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" rows="4"></textarea>
+					<label for="description" class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-full text-center font-semibold">Description of the Report</label>
+					<textarea id="description" bind:value={description} placeholder="Type your Description here" class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline max-w-[1000px]" rows="4"></textarea>
 					{#if errors.description}<p class="text-red-500 text-xs italic">{errors.description}</p>{/if}
 				</div>
 				<div class="mb-6">
-					<label for="images" class="block text-gray-700 text-sm font-bold mb-2 max-w-[1000px]">Images</label>
-					<input type="file" id="images" bind:files={images} multiple accept="image/*" class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
+					<label for="images" class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-full text-center font-semibold">Images</label>
+					<input type="file" id="images" bind:files={images} multiple accept="image/*" class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline max-w-[1000px]" />
 					{#if errors.images}<p class="text-red-500 text-xs italic">{errors.images}</p>{/if}
 				</div>
 			{/if}
 
 			{#if defecttype === 'Facility Damage' && place === 'Road'}
 				<div class="mb-6">
-					<label for="map" class="block text-gray-700 text-sm font-bold mb-2 max-w-[1000px]">Map</label>
+					<label for="map" class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-full text-center font-semibold">Map</label>
 					<Map {latitude} {longitude} />
 					{#if errors.latitude}<p class="text-red-500 text-xs italic">{errors.latitude}</p>{/if}
 				</div>
 				<div class="mb-6">
-					<label for="description" class="block text-gray-700 text-sm font-bold mb-2 max-w-[1000px]">Description of the Report</label>
-					<textarea id="description" bind:value={description} placeholder="Type your Description here" class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" rows="4"></textarea>
+					<label for="description" class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-full text-center font-semibold">Description of the Report</label>
+					<textarea id="description" bind:value={description} placeholder="Type your Description here" class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline max-w-[1000px]" rows="4"></textarea>
 					{#if errors.description}<p class="text-red-500 text-xs italic">{errors.description}</p>{/if}
 				</div>
 				<div class="mb-6">
-					<label for="images" class="block text-gray-700 text-sm font-bold mb-2 max-w-[1000px]">Images</label>
-					<input type="file" id="images" bind:files={images} multiple accept="image/*" class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
+					<label for="images" class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-full text-center font-semibold">Images</label>
+					<input type="file" id="images" bind:files={images} multiple accept="image/*" class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline max-w-[1000px]" />
 					{#if errors.images}<p class="text-red-500 text-xs italic">{errors.images}</p>{/if}
 				</div>
 			{/if}
@@ -435,24 +430,24 @@
 			{#if defecttype === 'Electrical Issues' || defecttype === 'Plumbing Issues'}
 				<div class="flex mb-6">
 					<div class="w-1/2 pr-2">
-						<label for="noblock" class="block text-gray-700 text-sm font-bold mb-2 max-w-[1000px]">No. Block</label>
-						<input id="noblock" type="text" bind:value={noblock} placeholder="Type your No. Block here" class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
+						<label for="noblock" class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-full text-center font-semibold">No. Block</label>
+						<input id="noblock" type="text" bind:value={noblock} placeholder="Type your No. Block here" class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline max-w-[1000px]" />
 						{#if errors.noblock}<p class="text-red-500 text-xs italic">{errors.noblock}</p>{/if}
 					</div>
 				</div>
 				<div class="mb-6">
-					<label for="map" class="block text-gray-700 text-sm font-bold mb-2 max-w-[1000px]">Map</label>
+					<label for="map" class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-full text-center font-semibold">Map</label>
 					<Map {latitude} {longitude} />
 					{#if errors.latitude}<p class="text-red-500 text-xs italic">{errors.latitude}</p>{/if}
 				</div>
 				<div class="mb-6">
-					<label for="description" class="block text-gray-700 text-sm font-bold mb-2 max-w-[1000px]">Description of the Report</label>
-					<textarea id="description" bind:value={description} placeholder="Type your Description here" class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" rows="4"></textarea>
+					<label for="description" class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-full text-center font-semibold">Description of the Report</label>
+					<textarea id="description" bind:value={description} placeholder="Type your Description here" class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline max-w-[1000px]" rows="4"></textarea>
 					{#if errors.description}<p class="text-red-500 text-xs italic">{errors.description}</p>{/if}
 				</div>
 				<div class="mb-6">
-					<label for="images" class="block text-gray-700 text-sm font-bold mb-2 max-w-[1000px]">Images</label>
-					<input type="file" id="images" bind:files={images} multiple accept="image/*" class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
+					<label for="images" class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-full text-center font-semibold">Images</label>
+					<input type="file" id="images" bind:files={images} multiple accept="image/*" class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline max-w-[1000px]" />
 					{#if errors.images}<p class="text-red-500 text-xs italic">{errors.images}</p>{/if}
 				</div>
 			{/if}
