@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import type { PageData } from './$types';
+	import { invalidate } from '$app/navigation';
 	import Sectionwrapper from '../component/sectionwrapper.svelte';
 	import Headers from '../component/header.svelte';
 
@@ -19,6 +20,11 @@
 
 	const handlereportupdate = async (id: any) => {
 		goto(`/student/edit-report/${id}`);
+	};
+
+	const handlereportdelete = async (id: any) => {
+		await supabase.from('reports').delete().eq('id', id);
+		invalidate('student:reports');
 	};
 </script>
 
@@ -59,11 +65,28 @@
 								<td class="py-2 px-4 border text-center"><p class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-full">{_.status}</p></td>
 								<td class="py-2 px-4 border text-center">
 									{#if _.status == 'rejected'}
-									<div class="flex flex-col space-y-2">
+									<div class="flex flex-col mb-2">
+										{#if _.status == 'rejected'}
+											<button 
+												on:click={() => alert(`Comment: ${_.comment}`)}
+												class="specialBtn p-2"
+											>
+											<p class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-full font-semibold">Comment</p>
+											</button>
+										{:else}
+											<button 
+												disabled
+												class="border border-gray-500 hover:border-gray-700 bg-red p-2"
+											>
+											<p class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-full font-semibold">Comment</p>
+											</button>
+										{/if}
+									</div>
+									<div class="flex flex-col mb-2">
 										{#if _.status == 'rejected'}
 										<button 
 												on:click={() => handlereportupdate(_.id)}
-												class="border border-red-500 hover:border-red-700 bg-red p-2"
+												class="specialBtnDark hover:border-red-900 p-2"
 											>
 											<p class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-fullfont-semibold">Edit</p>
 										</button>
@@ -78,18 +101,18 @@
 									</div>
 									<div class="flex flex-col space-y-2">
 										{#if _.status == 'rejected'}
-											<button 
-												on:click={() => alert(`Comment: ${_.comment}`)}
-												class="border border-red-500 hover:border-red-700 bg-red p-2"
+										<button 
+												on:click={() => handlereportdelete(_.id)}
+												class="specialBtn p-2"
 											>
-											<p class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-full font-semibold">Comment</p>
-											</button>
+											<p class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-fullfont-semibold">Delete</p>
+										</button>
 										{:else}
 											<button 
 												disabled
 												class="border border-gray-500 hover:border-gray-700 bg-red p-2"
 											>
-											<p class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-full font-semibold">Comment</p>
+												Delete
 											</button>
 										{/if}
 									</div>

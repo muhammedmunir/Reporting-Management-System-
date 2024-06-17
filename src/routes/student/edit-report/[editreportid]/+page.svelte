@@ -331,15 +331,15 @@
                 {#if errors.images}<p class="text-red-500 text-xs italic">{errors.images}</p>{/if}
             </div>
             <div class="flex items-center justify-between">
-                <button type="button" on:click={() => editMode = !editMode} class="specialBtnDark hover:bg-red-900 py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                <button type="button" on:click={() => editMode = !editMode} class="specialBtn py-2 px-4 rounded focus:outline-none focus:shadow-outline">
                     {editMode ? 'Cancel' : 'Edit'}
                 </button>
                 {#if editMode}
-                    <button type="submit" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                    <button type="submit" class="specialBtnDark hover:bg-red-900 py-2 px-4 rounded focus:outline-none focus:shadow-outline">
                         Save
                     </button>
                 {/if}
-                <a href="/student/form-reports" class="duration-200 hover:text-red-400 cursor-pointer">Cancel</a>
+                <a href="/student/form-reports" class="duration-200 hover:text-red-400 cursor-pointer">Back</a>
             </div>
         </form>
     </div>

@@ -13,8 +13,8 @@
 		goto(`/admin/reportsupdate/${report_id}`);
 	};
 
-	const handledelete = async () => {
-		await supabase.from('reports').delete().eq('id', _.id);
+	const handledelete = async (id) => {
+		await supabase.from('reports').delete().eq('id', id);
 		invalidate('admin:reports');
 	};
 </script>
@@ -70,7 +70,7 @@
 										{#if _.status == 'search contractor'}
 											<button 
 												on:click={async () => {
-													handledelete()
+													handledelete(_.id)
 												}}
 												class="border specialBtn p-2"
 											>
