@@ -20,10 +20,10 @@
 		</div>
 		<div class="flex flex-col gap-4 flex-1">
 			<button on:click={ () => reroute("/register-student")} class="border-none outline-none p-2 group duration-200 cursor-pointer text-left">
-				<p class="duration-200 group-hover:pl-2 poppins text-3xl font-semibold">Student Register <i class="fa-solid fa-chevron-right text-xl pl-4" /></p>
+				<p class="duration-200 group-hover:pl-2 poppins text-2xl font-semibold">Student Register <i class="fa-solid fa-chevron-right text-xl pl-4" /></p>
 			</button>
 			<button on:click={ () => reroute("/apply-register")} class="border-none outline-none p-2 group duration-200 cursor-pointer text-left">
-				<p class="duration-200 group-hover:pl-2 poppins text-3xl font-semibold">Apply Contractor <i class="fa-solid fa-chevron-right text-xl pl-4" /></p>
+				<p class="duration-200 group-hover:pl-2 poppins text-2xl font-semibold">Apply Contractor <i class="fa-solid fa-chevron-right text-xl pl-4" /></p>
 			</button>
 		</div>
 		<div class="flex items-center gap-4 flex-1 flex-col">

@@ -259,9 +259,9 @@
 
 <Sectionwrapper>
     <Headers { data } />
-    <div class="flex flex-col gap-10 flex-1 items-center justify-center pb-10 md:pb-14">
+    <div class="flex flex-col gap-10 flex-1 items-center justify-center pb-10 md:pb-14 w-full">
 		<h2 class="text-3xl sm:text-1xl md:text-2xl lg:text-3xl max-w-[1200px] mx-auto w-full text-center font-semibold">Form Report</h2>
-		<form on:submit|preventDefault={handleSubmit} class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+		<form on:submit|preventDefault={handleSubmit} class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 w-full">
 			<div class="pb-5">
 				<ul class="list-disc pl-10">
 					<li class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-full text-center font-semibold">Fill the form to report</li>

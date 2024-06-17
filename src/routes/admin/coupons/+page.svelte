@@ -1,6 +1,8 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import type { PageData } from './$types';
+	import Sectionwrapper from '../component/sectionwrapper.svelte';
+    import Headers from '../component/header.svelte';
 	import { invalidate } from '$app/navigation';
 
 	export let data: PageData;
@@ -8,89 +10,78 @@
 	let { supabase, session } = data;
 	$: ({ supabase, session } = data);
 
-	const handleSignOut = async () => {
-		await supabase.auth.signOut();
-		goto('/login', { replaceState: true });
+	function reroute(href) {
+		window.location.href = href;
 	};
 
 	const handleedit = async (id: any) => {
 		goto(`/admin/coupons/${id}`);
 	};
+
+	const handledelete = async () => {
+		await supabase.from('reports').delete().eq('id', _.id);
+		invalidate('admin:reports');
+	};
 </script>
 
-<header class="flex flex-col relative z-20">
-    <div class="max-w-[1400px] mx-auto w-full flex items-center justify-between p-4 py-6">
-        <a href="/student">
-            <h1 class="font-semibold">UTM<span class="text-indigo-400">list Coupons</span></h1>
-        </a>
-        <button class="md:hidden grid place-items-center">
-            <i class="fa-solid fa-bars"></i>
-        </button>
-        <nav class="md:flex items-center gap-4 lg:gap-6">
-            <a class="duration-200 hover:text-indigo-400 cursor-pointer" href="/admin/reports">New Reports</a>
-			<a class="duration-200 hover:text-indigo-400 cursor-pointer" href="/admin/reportsupdate">Update Reports</a>
-			<a class="duration-200 hover:text-indigo-400 cursor-pointer" href="/admin/complete">Completed Reports</a>
-            <a class="duration-200 hover:text-indigo-400 cursor-pointer" href="/admin/students">Ranking Students</a>
-			<a class="duration-200 hover:text-indigo-400 cursor-pointer" href="/admin/contractors">Ranking Contractors</a>
-			<a class="duration-200 hover:text-indigo-400 cursor-pointer" href="/admin/coupons">List Coupons</a>
-			<a class="duration-200 hover:text-indigo-400 cursor-pointer" href="/admin/register-contractor">Contractor Register</a>
-			<a class="duration-200 hover:text-indigo-400 cursor-pointer" href="/admin/profile">Profile</a>
-			<button class="specialBtn" on:click={handleSignOut}><p>Logout</p></button>
-        </nav>
-    </div>
-</header>
-
-<main class="max-w-4xl mx-auto mt-12 px-4">
-	<div class="flex flex-row justify-between">
-		<div>
-			<p class="font-bold text-2xl">List Coupons</p>
-			<p class="text-sm font-semibold pb-5">Total : {coupons?.length}</p>
-		</div>
-		<div class="p-2">
-			<a
-				class="border border-orange-400 p-2 rounded-md bg-orange-50 text-orange-800"
-				href="/admin/coupon">Make Coupon</a
-			>
+<Sectionwrapper>
+    <Headers { data } />
+    <div class="flex flex-col gap-10 flex-1 items-center justify-center pb-10 md:pb-14 w-full">
+		<h2 class="text-3xl sm:text-2xl md:text-3xl lg:text-4xl max-w-[1200px] mx-auto w-full text-center font-semibold">List Coupons</h2>
+		<div class="overflow-x-auto w-full">
+			<div class="flex flex-row justify-between w-full">
+				{#if coupons?.length > 0}
+				<div class="mb-4 md:mb-0">
+					<p class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-full font-semibold">Total : {coupons?.length}</p>
+				</div>
+				{/if}
+				<div class="p-2">
+					<button on:click={ () => reroute("/admin/coupon")} class="specialBtnDark hover:bg-red-900"><p class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-full font-semibold">Create Coupon</p></button>
+				</div>
+			</div>
+			{#if coupons?.length > 0}
+				<table class="w-full border-collapse">
+					<thead class="bg-gray-200">
+						<tr>
+							<th class="py-2 px-4 border text-center"><p class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-full font-semibold">No</p></th>
+							<th class="py-2 px-4 border text-center"><p class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-full font-semibold">Arked</p></th>
+							<th class="py-2 px-4 border text-center"><p class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-full font-semibold">Food or Drink</p></th>
+							<th class="py-2 px-4 border text-center"><p class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-full font-semibold">Quantity</p></th>
+							<th class="py-2 px-4 border text-center"><p class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-full font-semibold">price</p></th>
+							<th class="py-2 px-4 border text-center"><p class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-full font-semibold">Options</p></th>
+						</tr>
+					</thead>
+					<tbody class="divide-y divide-gray-200">
+						{#each data.coupons as _, index}
+							<tr class="hover:bg-gray-100">
+								<td class="py-2 px-4 border text-center"><p class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-fullr">{index + 1}</p></td>
+								<td class="py-2 px-4 border text-center"><p class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-fullr">{_.title}</p></td>
+								<td class="py-2 px-4 border text-center"><p class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-fullr">{_.description}</p></td>
+								<td class="py-2 px-4 border text-center"><p class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-fullr">{_.quantity}</p></td>
+								<td class="py-2 px-4 border text-center"><p class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-fullr">{_.price}</p></td>
+								<td class="py-2 px-4 border text-center">
+									<div class="flex flex-col mb-2">
+										<button
+											on:click={() => handleedit(_.id)}
+											class="specialBtnDark hover:bg-red-900 py-2 px-4 rounded focus:outline-none sm:px-20"
+											><p class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-fullr">Edit</p></button
+										>
+									</div>
+									<div class="flex flex-col">
+										<button
+											on:click={() => handledelete()}
+											class="specialBtn py-2 px-4 rounded focus:outline-none sm:px-20"
+											><p class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-fullr">Delete</p></button
+										>
+									</div>
+								</td>						
+							</tr>
+						{/each}
+					</tbody>
+				</table>
+			{:else}
+			<p class="text-12l sm:text-1xl md:text-2xl lg:text-2xl max-w-[1200px] mx-auto w-full text-center font-semibold">No available complete</p>
+			{/if}
 		</div>
 	</div>
-	<div class="overflow-x-auto">
-		<table class="w-full border-collapse">
-			<thead class="bg-gray-200">
-				<tr>
-					<th class="py-2 px-4 border">No</th>
-					<th class="py-2 px-4 border">Arked</th>
-					<th class="py-2 px-4 border">Food or Drink</th>
-                    <th class="py-2 px-4 border">Quantity</th>
-                    <th class="py-2 px-4 border">price</th>
-					<th class="py-2 px-4 border">Options</th>
-				</tr>
-			</thead>
-			<tbody class="divide-y divide-gray-200">
-				{#each data.coupons as _, index}
-					<tr class="hover:bg-gray-100">
-						<td class="py-2 px-4 border">{index + 1}</td>
-						<td class="py-2 px-4 border">{_.title}</td>
-						<td class="py-2 px-4 border">{_.description}</td>
-                        <td class="py-2 px-4 border">{_.quantity}</td>
-						<td class="py-2 px-4 border">{_.price}</td>
-						<td class="py-2 px-4 border">
-							<div class="flex flex-col mb-3">
-								<button
-									on:click={() => handleedit(_.id)}
-									class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none sm:px-20"
-									>Edit</button
-								>
-							</div>
-						</td>						
-					</tr>
-				{/each}
-			</tbody>
-		</table>
-	</div>
-</main>
-
-<section class={"min-h-screen flex flex-col px-4"}>
-    <dev class="flex flex-col flex-1 max-w-[1400px] mx-auto w-full">
-        <slot/>
-    </dev>
-</section>
+</Sectionwrapper>

@@ -1,98 +1,64 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import { invalidate } from '$app/navigation';
 	import type { PageData } from './$types';
+	import Sectionwrapper from '../component/sectionwrapper.svelte';
+    import Headers from '../component/header.svelte';
 
 	export let data: PageData;
 	let { supabase, session } = data;
 	$: ({ supabase, session } = data);
-
-	const handleSignOut = async () => {
-		await supabase.auth.signOut();
-		goto('/login', { replaceState: true });
-	};
 
 	const handlereportdetail = async (id: any) => {
 		goto(`/admin/complete/${id}`);
 	};
 </script>
 
-<header class="flex flex-col relative z-20">
-    <div class="max-w-[1400px] mx-auto w-full flex items-center justify-between p-4 py-6">
-        <a href="/admin">
-            <h1 class="font-semibold">UTM<span class="text-indigo-400">Complaint</span></h1>
-        </a>
-        <button class="md:hidden grid place-items-center">
-            <i class="fa-solid fa-bars"></i>
-        </button>
-        <nav class="md:flex items-center gap-4 lg:gap-6">
-            <a class="duration-200 hover:text-indigo-400 cursor-pointer" href="/admin/reports">New Reports</a>
-			<a class="duration-200 hover:text-indigo-400 cursor-pointer" href="/admin/reportsupdate">Update Reports</a>
-			<a class="duration-200 hover:text-indigo-400 cursor-pointer" href="/admin/complete">Completed Reports</a>
-            <a class="duration-200 hover:text-indigo-400 cursor-pointer" href="/admin/students">Ranking Students</a>
-			<a class="duration-200 hover:text-indigo-400 cursor-pointer" href="/admin/contractors">Ranking Contractors</a>
-			<a class="duration-200 hover:text-indigo-400 cursor-pointer" href="/admin/coupons">List Coupons</a>
-			<a class="duration-200 hover:text-indigo-400 cursor-pointer" href="/admin/register-contractor">Contractor Register</a>
-			<a class="duration-200 hover:text-indigo-400 cursor-pointer" href="/admin/profile">Profile</a>
-			<button class="specialBtn" on:click={handleSignOut}><p>Logout</p></button>
-        </nav>
-    </div>
-</header>
-
-<main class="max-w-4xl mx-auto mt-12 px-4">
-	<div class="flex flex-row justify-between">
-		<div>
-			<p class="font-bold text-2xl">Completed Reports</p>
-			<p class="text-sm font-semibold pb-5">Total : {data.reports?.length}</p>
-		</div>
+<Sectionwrapper>
+    <Headers { data } />
+    <div class="flex flex-col gap-10 flex-1 items-center justify-center pb-10 md:pb-14 w-full">
+		<h2 class="text-3xl sm:text-2xl md:text-3xl lg:text-4xl max-w-[1200px] mx-auto w-full text-center font-semibold">Completed Reports</h2>
+		{#if data.reports?.length > 0}
+			<div class="overflow-x-auto w-full">
+				<div class="flex flex-row justify-between w-full">
+					<div>
+						<p class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-full font-semibold">Total : {data.reports?.length}</p>
+					</div>
+				</div>
+				<table class="w-full border-collapse">
+					<thead class="bg-gray-200">
+						<tr>
+							<th class="py-2 px-4 border text-center"><p class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-full font-semibold">No</p></th>
+							<th class="py-2 px-4 border text-center"><p class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-full font-semibold">Kolej</p></th>
+							<th class="py-2 px-4 border text-center"><p class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-full font-semibold">Place</p></th>
+							<th class="py-2 px-4 border text-center"><p class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-full font-semibold">Description</p></th>
+							<th class="py-2 px-4 border text-center"><p class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-full font-semibold">Status</p></th>
+							<th class="py-2 px-4 border text-center"><p class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-full font-semibold">Options</p></th>
+						</tr>
+					</thead>
+					<tbody class="divide-y divide-gray-200">
+						{#each data.reports as _, index}
+							<tr class="hover:bg-gray-100">
+								<td class="py-2 px-4 border text-center"><p class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-fullr">{index + 1}</p></td>
+								<td class="py-2 px-4 border text-center"><p class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-fullr">{_.kolej}</p></td>
+								<td class="py-2 px-4 border text-center"><p class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-fullr">{_.place}</p></td>
+								<td class="py-2 px-4 border text-center"><p class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-fullr">{_.description}</p></td>
+								<td class="py-2 px-4 border text-center"><p class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-fullr">{_.status}</p></td>
+								<td class="py-2 px-4 border text-center">
+									<div class="flex flex-col space-y-2">
+									<button
+											on:click={() => handlereportdetail(_.id)}
+											class="specialBtnDark hover:bg-red-900 py-2 px-4 rounded focus:outline-none sm:px-20"
+											><p class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-fullr">Detail</p></button
+										>
+									</div>
+								</td>
+							</tr>
+						{/each}
+					</tbody>
+				</table>
+			</div>
+		{:else}
+			<p class="text-12l sm:text-1xl md:text-2xl lg:text-2xl max-w-[1200px] mx-auto w-full text-center font-semibold">No available complete</p>
+		{/if}
 	</div>
-	<div class="overflow-x-auto">
-		<table class="w-full border-collapse">
-			<thead class="bg-gray-200">
-				<tr>
-					<th class="py-2 px-4 border">No</th>
-					<th class="py-2 px-4 border">Kolej</th>
-					<th class="py-2 px-4 border">Place</th>
-					<th class="py-2 px-4 border">Description</th>
-					<th class="py-2 px-4 border">Status</th>
-					<th class="py-2 px-4 border">Options</th>
-				</tr>
-			</thead>
-			<tbody class="divide-y divide-gray-200">
-				{#each data.reports as _, index}
-					<tr class="hover:bg-gray-100">
-						<td class="py-2 px-4 border">{index + 1}</td>
-						<td class="py-2 px-4 border">{_.kolej}</td>
-						<td class="py-2 px-4 border">{_.place}</td>
-						<td class="py-2 px-4 border">{_.description}</td>
-						<td class="py-2 px-4 border">{_.status}</td>
-						<td class="py-2 px-4 border">
-							<div class="flex flex-col">
-							<button
-									on:click={() => handlereportdetail(_.id)}
-									class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none sm:px-20"
-									>Detail</button
-								>
-							<!--<div class="flex flex-col">
-								<button
-									on:click={async () => {
-										await supabase.from('reports').delete().eq('id', _.id);
-										invalidate('admin:reports');
-									}}
-									class="border border-orange-500 bg-red p-2">Remove</button
-								>
-							</div>-->
-							</div>
-						</td>
-					</tr>
-				{/each}
-			</tbody>
-		</table>
-	</div>
-</main>
-
-<section class={"min-h-screen flex flex-col px-4"}>
-    <dev class="flex flex-col flex-1 max-w-[1400px] mx-auto w-full">
-        <slot/>
-    </dev>
-</section>
+</Sectionwrapper>

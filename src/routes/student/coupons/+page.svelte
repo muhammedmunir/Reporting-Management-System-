@@ -49,18 +49,13 @@
     const handleQuantityChange = (couponId: number, quantity: number) => {
       selectedQuantities.set(couponId, quantity);
     };
-
-    const handleSignOut = async () => {
-		await supabase.auth.signOut();
-		goto('/login', { replaceState: true });
-	};
 </script>
 
 <Sectionwrapper>
   <Headers { data } />
-  <div class="flex flex-col gap-10 flex-1 items-center justify-center pb-10 md:pb-14">
+  <div class="flex flex-col gap-10 flex-1 items-center justify-center pb-10 md:pb-14 w-full">
     <h2 class="text-3xl sm:text-1xl md:text-2xl lg:text-3xl max-w-[1200px] mx-auto w-full text-center font-semibold">Available Coupons</h2>
-    <section class="min-h-screen flex flex-col px-4">
+    <section class="min-h-screen flex flex-col px-4 w-full">
         <div class="flex flex-col flex-1 max-w-[1400px] mx-auto w-full">
         <p class="mb-4 text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-full text-center font-semibold">Your Points: {userProfile.points}</p>
         <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">

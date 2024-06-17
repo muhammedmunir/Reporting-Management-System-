@@ -1,6 +1,8 @@
 <script lang="ts">
     import { goto } from '$app/navigation';
     import type { PageData } from './$types';
+	import Sectionwrapper from './component/sectionwrapper.svelte';
+    import Headers from './component/header.svelte';
 
     export let data: PageData;
     let { supabase, session } = data;
@@ -31,107 +33,86 @@
     };
 </script>
 
-<header class="flex flex-col relative z-20">
-    <div class="max-w-[1400px] mx-auto w-full flex items-center justify-between p-4 py-6">
-        <a href="/admin">
-            <h1 class="font-semibold">UTM<span class="text-indigo-400">Complaint</span></h1>
-        </a>
-        <button class="md:hidden grid place-items-center">
-            <i class="fa-solid fa-bars"></i>
-        </button>
-        <nav class="md:flex items-center gap-4 lg:gap-6">
-            <a class="duration-200 hover:text-indigo-400 cursor-pointer" href="/admin/reports">New Reports</a>
-            <a class="duration-200 hover:text-indigo-400 cursor-pointer" href="/admin/reportsupdate">Update Reports</a>
-            <a class="duration-200 hover:text-indigo-400 cursor-pointer" href="/admin/complete">Completed Reports</a>
-            <a class="duration-200 hover:text-indigo-400 cursor-pointer" href="/admin/students">Ranking Students</a>
-            <a class="duration-200 hover:text-indigo-400 cursor-pointer" href="/admin/contractors">Ranking Contractors</a>
-            <a class="duration-200 hover:text-indigo-400 cursor-pointer" href="/admin/coupons">List Coupons</a>
-            <a class="duration-200 hover:text-indigo-400 cursor-pointer" href="/admin/register-contractor">Contractor Register</a>
-            <a class="duration-200 hover:text-indigo-400 cursor-pointer" href="/admin/profile">Profile</a>
-            <button class="specialBtn" on:click={handleSignOut}><p>Logout</p></button>
-        </nav>
-    </div>
-</header>
-
-<main class="max-w-4xl mx-auto mt-12 px-4">
-    <h1 class="text-center text-3xl font-bold mb-4">Welcome Admin, {user_profile.username}</h1>
-</main>
-
-<section class={"min-h-screen flex flex-col px-4"}>
-    <div class="flex flex-col flex-1 max-w-[1400px] mx-auto w-full">
-        <div class="mb-4">
-            <h2 class="text-2xl font-semibold mb-4">Status Reports</h2>
-            <table class="w-full border-collapse">
-                <thead class="bg-gray-200">
-                    <tr>
-                        <th class="text-center py-auto px-auto border">Pending</th>
-                        <th class="text-center py-auto px-auto border">Search Contractor</th>
-                        <th class="text-center py-auto px-auto border">In Progress</th>
-                        <th class="text-center py-auto px-auto border">Done Progress</th>
-                        <th class="text-center py-auto px-auto border">Complete</th>
-                    </tr>
-                </thead>
-                <tbody class="divide-y divide-gray-200">
-                    <tr class="hover:bg-gray-100">
-                        <td class="text-center py-auto px-auto border">{statusCounts.pending}</td>
-                        <td class="text-center py-auto px-auto border">{statusCounts['search contractor']}</td>
-                        <td class="text-center py-auto px-auto border">{statusCounts['in progress']}</td>
-                        <td class="text-center py-auto px-auto border">{statusCounts['done progress']}</td>
-                        <td class="text-center py-auto px-auto border">{statusCounts.complete}</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        <div class="mb-4">
-            <h2 class="text-2xl font-semibold mb-4">Contractor Apply</h2>
-            <table class="w-full border-collapse">
-                <thead class="bg-gray-200">
-                    <tr>
-                        <th class="text-center py-auto px-auto border">No.</th>
-                        <th class="text-center py-auto px-auto border">Email</th>
-                        <th class="text-center py-auto px-auto border">Name</th>
-                        <th class="text-center py-auto px-auto border">No. Phone</th>
-                        <th class="text-center py-auto px-auto border">Apply At</th>
-                    </tr>
-                </thead>
-                <tbody class="divide-y divide-gray-200">
-                    {#each contractors as contractor, index}
-                        <tr class="hover:bg-gray-100">
-                            <td class="text-center py-auto px-auto border">{index + 1}</td>
-                            <td class="text-center py-auto px-auto border">{contractor.email}</td>
-                            <td class="text-center py-auto px-auto border">{contractor.fullname}</td>
-                            <td class="text-center py-auto px-auto border">{contractor.phone_number}</td>
-                            <td class="text-center py-auto px-auto border">{formatDate(contractor.create_at)}</td>
+<Sectionwrapper>
+    <Headers { data } />
+    <div class="flex flex-col gap-10 flex-1 items-center justify-center pb-10 md:pb-14 w-full">
+        <h2 class="text-1xl sm:text-2xl md:text-3xl lg:text-4xl max-w-[1200px] mx-auto w-full text-center font-semibold">Welcome Contractor, {user_profile.username}</h2>
+        <div class="overflow-x-auto w-full">
+            <div class="mb-4">
+                <h2 class="text-2xl font-semibold mb-2">Status Reports</h2>
+                <table class="w-full border-collapse">
+                    <thead class="bg-gray-200">
+                        <tr>
+                            <th class="py-2 px-4 border text-center"><p class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-full font-semibold">Pending</p></th>
+                            <th class="py-2 px-4 border text-center"><p class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-full font-semibold">Search Contractor</p></th>
+                            <th class="py-2 px-4 border text-center"><p class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-full font-semibold">In Progress</p></th>
+                            <th class="py-2 px-4 border text-center"><p class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-full font-semibold">Done Progress</p></th>
+                            <th class="py-2 px-4 border text-center"><p class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-full font-semibold">Complete</p></th>
                         </tr>
-                    {/each}
-                </tbody>
-            </table>
-        </div>
-
-        <div class="mb-4">
-            <h2 class="text-2xl font-semibold mb-4">Claimed Coupons</h2>
-            <table class="w-full border-collapse">
-                <thead class="bg-gray-200">
-                    <tr>
-                        <th class="text-center py-auto px-auto border">No.</th>
-                        <th class="text-center py-auto px-auto border">Name</th>
-                        <th class="text-center py-auto px-auto border">Arked</th>
-						<th class="text-center py-auto px-auto border">Description</th>
-                        <th class="text-center py-auto px-auto border">Claimed At</th>
-                    </tr>
-                </thead>
-                <tbody class="divide-y divide-gray-200">
-                    {#each claimed_coupons as coupon, index}
+                    </thead>
+                    <tbody class="divide-y divide-gray-200">
                         <tr class="hover:bg-gray-100">
-                            <td class="text-center py-auto px-auto border">{index + 1}</td>
-                            <td class="text-center py-auto px-auto border">{coupon.profiles.username}</td>
-                            <td class="text-center py-auto px-auto border">{coupon.coupons.title}</td>
-							<td class="text-center py-auto px-auto border">{coupon.coupons.description}</td>
-                            <td class="text-center py-auto px-auto border">{formatDate(coupon.claimed_at)}</td>
+                            <td class="py-2 px-4 border text-center"><p class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-fullr">{statusCounts.pending}</p></td>
+                            <td class="py-2 px-4 border text-center"><p class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-fullr">{statusCounts['search contractor']}</p></td>
+                            <td class="py-2 px-4 border text-center"><p class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-fullr">{statusCounts['in progress']}</p></td>
+                            <td class="py-2 px-4 border text-center"><p class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-fullr">{statusCounts['done progress']}</p></td>
+                            <td class="py-2 px-4 border text-center"><p class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-fullr">{statusCounts.complete}</p></td>
                         </tr>
-                    {/each}
-                </tbody>
-            </table>
+                    </tbody>
+                </table>
+            </div>
+            <div class="mb-4">
+                <h2 class="text-2xl font-semibold mb-2">Contractor Apply</h2>
+                <table class="w-full border-collapse">
+                    <thead class="bg-gray-200">
+                        <tr>
+                            <th class="py-2 px-4 border text-center"><p class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-full font-semibold">No.</p></th>
+                            <th class="py-2 px-4 border text-center"><p class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-full font-semibold">Email</p></th>
+                            <th class="py-2 px-4 border text-center"><p class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-full font-semibold">Name</p></th>
+                            <th class="py-2 px-4 border text-center"><p class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-full font-semibold">No. Phone</p></th>
+                            <th class="py-2 px-4 border text-center"><p class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-full font-semibold">Apply At</p></th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200">
+                        {#each contractors as contractor, index}
+                            <tr class="hover:bg-gray-100">
+                                <td class="py-2 px-4 border text-center"><p class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-fullr">{index + 1}</p></td>
+                                <td class="py-2 px-4 border text-center"><p class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-fullr">{contractor.email}</p></td>
+                                <td class="py-2 px-4 border text-center"><p class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-fullr">{contractor.fullname}</p></td>
+                                <td class="py-2 px-4 border text-center"><p class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-fullr">{contractor.phone_number}</p></td>
+                                <td class="py-2 px-4 border text-center"><p class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-fullr">{formatDate(contractor.create_at)}</p></td>
+                            </tr>
+                        {/each}
+                    </tbody>
+                </table>
+            </div>
+    
+            <div class="mb-4">
+                <h2 class="text-2xl font-semibold mb-2">Claimed Coupons</h2>
+                <table class="w-full border-collapse">
+                    <thead class="bg-gray-200">
+                        <tr>
+                            <th class="py-2 px-4 border text-center"><p class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-full font-semibold">No.</p></th>
+                            <th class="py-2 px-4 border text-center"><p class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-full font-semibold">Name</p></th>
+                            <th class="py-2 px-4 border text-center"><p class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-full font-semibold">Arked</p></th>
+                            <th class="py-2 px-4 border text-center"><p class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-full font-semibold">Description</p></th>
+                            <th class="py-2 px-4 border text-center"><p class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-full font-semibold">Claimed At</p></th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200">
+                        {#each claimed_coupons as coupon, index}
+                            <tr class="hover:bg-gray-100">
+                                <td class="py-2 px-4 border text-center"><p class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-fullr">{index + 1}</p></td>
+                                <td class="py-2 px-4 border text-center"><p class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-fullr">{coupon.profiles.username}</p></td>
+                                <td class="py-2 px-4 border text-center"><p class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-fullr">{coupon.coupons.title}</p></td>
+                                <td class="py-2 px-4 border text-center"><p class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-fullr">{coupon.coupons.description}</p></td>
+                                <td class="py-2 px-4 border text-center"><p class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-fullr">{formatDate(coupon.claimed_at)}</p></td>
+                            </tr>
+                        {/each}
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
-</section>
+</Sectionwrapper>
+

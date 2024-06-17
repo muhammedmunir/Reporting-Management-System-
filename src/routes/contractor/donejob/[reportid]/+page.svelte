@@ -23,9 +23,9 @@
 
 <Sectionwrapper>
     <Headers { data } />
-    <div class="rounded px-8 pt-6 flex-col gap-10 flex-1 items-center justify-center pb-10 md:pb-14">
+    <div class="rounded px-8 pt-6 flex-col gap-10 flex-1 items-center justify-center pb-10 md:pb-14 w-full">
         <h2 class="text-3xl sm:text-1xl md:text-2xl lg:text-3xl max-w-[1200px] mx-auto w-full text-center font-semibold">Detail Report</h2>
-        <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+        <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 w-full">
             {#if reports.owner_username}
                 <div class="mb-6">
                     <label for="studentname" class="block text-gray-700 text-sm font-bold mb-2">Student Name</label>

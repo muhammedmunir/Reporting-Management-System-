@@ -1,131 +1,65 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import { invalidate } from '$app/navigation';
 	import type { PageData } from '../reports/$types';
-	import { page } from '$app/stores';
+	import Sectionwrapper from '../component/sectionwrapper.svelte';
+    import Headers from '../component/header.svelte';
 
 	export let data: PageData;
 	let reports = data.reports;
 	let { supabase, session } = data;
 	$: ({ supabase, session } = data);
 
-	const handleSignOut = async () => {
-		await supabase.auth.signOut();
-		goto('/login', { replaceState: true });
-	};
-
 	const handlereportdetail = async (id: any) => {
 		goto(`/admin/reports/${id}`);
 	};
 </script>
 
-<header class="flex flex-col relative z-20">
-    <div class="max-w-[1400px] mx-auto w-full flex items-center justify-between p-4 py-6">
-        <a href="/contractor">
-            <h1 class="font-semibold">UTM<span class="text-indigo-400">Complaint</span></h1>
-        </a>
-        <button class="md:hidden grid place-items-center">
-            <i class="fa-solid fa-bars"></i>
-        </button>
-        <nav class="md:flex items-center gap-4 lg:gap-6">
-            <a class="duration-200 hover:text-indigo-400 cursor-pointer" href="/admin/reports">New Reports</a>
-			<a class="duration-200 hover:text-indigo-400 cursor-pointer" href="/admin/reportsupdate">Update Reports</a>
-			<a class="duration-200 hover:text-indigo-400 cursor-pointer" href="/admin/complete">Completed Reports</a>
-            <a class="duration-200 hover:text-indigo-400 cursor-pointer" href="/admin/students">Ranking Students</a>
-			<a class="duration-200 hover:text-indigo-400 cursor-pointer" href="/admin/contractors">Ranking Contractors</a>
-			<a class="duration-200 hover:text-indigo-400 cursor-pointer" href="/admin/coupons">List Coupons</a>
-			<a class="duration-200 hover:text-indigo-400 cursor-pointer" href="/admin/register-contractor">Contractor Register</a>
-			<a class="duration-200 hover:text-indigo-400 cursor-pointer" href="/admin/profile">Profile</a>
-            <button class="specialBtn" on:click={handleSignOut}><p>Logout</p></button>
-        </nav>
-    </div>
-</header>
-
-<main class="max-w-6xl mx-auto mt-12 px-4">
-	<div class="flex flex-row justify-between">
-		<div>
-			<p class="font-bold text-2xl">New Reports</p>
-			<p class="text-sm font-semibold pb-5">Total : {data.reports?.length}</p>
-		</div>
-	</div>
-	<div class="overflow-x-auto">
-		<table class="w-full border-collapse">
-			<thead class="bg-gray-200">
-				<tr>
-					<th class="py-2 px-4 border">No</th>
-					<th class="py-2 px-4 border">Kolej</th>
-					<th class="py-2 px-4 border">Place</th>
-					<th class="py-2 px-4 border">Description</th>
-					<!--<th class="py-2 px-4 border">Severity</th>-->
-					<!--<th class="py-2 px-4 border">Images</th>-->
-					<th class="py-2 px-4 border">Options</th>
-				</tr>
-			</thead>
-			<tbody class="divide-y divide-gray-200">
-				{#each data.reports as _, index}
-					<tr class="hover:bg-gray-100">
-						<td class="py-2 px-4 border">{index + 1}</td>
-						<td class="py-2 px-4 border">{_.kolej}</td>
-						<td class="py-2 px-4 border">{_.place}</td>
-						<td class="py-2 px-4 border">{_.description}</td>
-						<!--<td class="py-2 px-4 border">{_.severity}</td>-->
-						<!--<td class="py-2 px-4 border">
-							{#each _.images as childnode, index}
-								<div class="flex flex-col">
-									<p class="text-sm font-medium">Image {index + 1}</p>
-									<div class="">
-										<img
-											width="200"
-											src={supabase.storage.from('').getPublicUrl(childnode).data.publicUrl}
-											alt="gmabnar"
-										/>
+<Sectionwrapper>
+    <Headers { data } />
+    <div class="flex flex-col gap-10 flex-1 items-center justify-center pb-10 md:pb-14 w-full">
+		<h2 class="text-3xl sm:text-2xl md:text-3xl lg:text-4xl max-w-[1200px] mx-auto w-full text-center font-semibold">New Reports</h2>
+		{#if data.reports?.length > 0}
+			<div class="overflow-x-auto w-full">
+				<div class="flex flex-row justify-between w-full">
+					<div>
+						<p class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-full font-semibold">Total : {data.reports?.length}</p>
+					</div>
+				</div>
+				<table class="w-full border-collapse">
+					<thead class="bg-gray-200">
+						<tr>
+							<th class="py-2 px-4 border text-center"><p class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-full font-semibold">No</p></th>
+							<th class="py-2 px-4 border text-center"><p class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-full font-semibold">Kolej</p></th>
+							<th class="py-2 px-4 border text-center"><p class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-full font-semibold">Place</p></th>
+							<th class="py-2 px-4 border text-center"><p class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-full font-semibold">Description</p></th>
+							<th class="py-2 px-4 border text-center"><p class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-full font-semibold">Status</p></th>
+							<th class="py-2 px-4 border text-center"><p class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-full font-semibold">Options</p></th>
+						</tr>
+					</thead>
+					<tbody class="divide-y divide-gray-200">
+						{#each data.reports as _, index}
+							<tr class="hover:bg-gray-100">
+								<td class="py-2 px-4 border text-center"><p class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-fullr">{index + 1}</p></td>
+								<td class="py-2 px-4 border text-center"><p class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-fullr">{_.kolej}</p></td>
+								<td class="py-2 px-4 border text-center"><p class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-fullr">{_.place}</p></td>
+								<td class="py-2 px-4 border text-center"><p class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-fullr">{_.description}</p></td>
+								<td class="py-2 px-4 border text-center"><p class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-fullr">{_.status}</p></td>
+								<td class="py-2 px-4 border text-center">
+									<div class="flex flex-col space-y-2">
+										<button
+												on:click={() => handlereportdetail(_.id)}
+												class="specialBtnDark hover:bg-red-900 py-2 px-4 rounded focus:outline-none sm:px-20"
+												><p class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-fullr">Detail</p></button
+										>
 									</div>
-								</div>
-							{/each}
-						</td>-->
-						<td class="py-2 px-4 border">
-							<!--<div class="flex flex-col mb-3">
-								<button
-									on:click={async () => {
-										await supabase.from('reports').update({ status: 'search contractor' }).eq('id', _.id);
-										invalidate('admin:reports');
-									}}
-									class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none sm:px-20">Approve</button
-								>
-							</div>
-							
-							<div class="flex flex-col">
-								<button
-									on:click={async () => {
-										await supabase.from('reports').update({ status: 'rejected' }).eq('id', _.id);
-										invalidate('admin:reports');
-									}}
-									class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none sm:px-20">Reject</button
-								>
-							</div>-->
-							<div class="flex flex-col mb-3">
-								<button
-									on:click={() => handlereportdetail(_.id)}
-									class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none sm:px-20"
-									>Detail</button
-								>
-							</div>
-							<!--<div class="flex flex-col mb-3">
-								<button
-									on:click={() => ClickId(_.id) }
-									class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none sm:px-20">Detail</button
-								>
-							</div>-->
-						</td>
-					</tr>
-				{/each}
-			</tbody>
-		</table>
+								</td>
+							</tr>
+						{/each}
+					</tbody>
+				</table>
+			</div>
+		{:else}
+		<p class="text-12l sm:text-1xl md:text-2xl lg:text-2xl max-w-[1200px] mx-auto w-full text-center font-semibold">No available new report</p>
+		{/if}
 	</div>
-</main>
-
-<section class={'min-h-screen flex flex-col px-4'}>
-	<dev class="flex flex-col flex-1 max-w-[1400px] mx-auto w-full">
-		<slot />
-	</dev>
-</section>
+</Sectionwrapper>
