@@ -1,8 +1,8 @@
-<script>
+<script lang="ts">
     import Sectionwrapper from "./component/sectionwrapper.svelte";
     import Header from "./component/header.svelte";
     
-    function reroute(href) {
+    function reroute(href: any) {
 		window.location.href = href;
     };
 </script>

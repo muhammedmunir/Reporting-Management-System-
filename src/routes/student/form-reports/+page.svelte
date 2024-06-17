@@ -10,7 +10,7 @@
 	let { supabase, session } = data;
 	$: ({ supabase, session } = data);
 
-	function reroute(href) {
+	function reroute(href: any) {
 		window.location.href = href;
 	};
 
