@@ -115,9 +115,13 @@
 					.from('profiles')
 					.update({ username, full_name, matrikID, role, phone, email })
 					.eq('id', data.user.id);
-				goto('/login');
+				goto('/login?message=Please confirm your email before logging in.');
 			} else {
-				errorMessage = error.message;
+				if (error.status === 429) {
+						errorMessage = 'Rate limit exceeded. Please try again later.';
+				} else {
+					errorMessage = error.message;
+				}
 			}
 		} else {
 			errorMessage = 'Please fill all fields';

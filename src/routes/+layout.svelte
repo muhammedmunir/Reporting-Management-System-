@@ -4,6 +4,10 @@
 
 </script>
 
+<svelte:head>
+	<title>UTMComplaint</title>
+</svelte:head>
+
 <slot />
 
 <Footer />
