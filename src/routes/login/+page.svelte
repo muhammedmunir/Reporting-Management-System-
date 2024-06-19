@@ -49,6 +49,11 @@
 		}
 		loading = false;
 	};
+
+	const handleForget = async () => {
+		loading = true;
+		goto('/recovery');
+	};
 </script>
 
 <Sectionwrapper>
@@ -84,12 +89,21 @@
 			
 			<p class="text-red-500 text-center text-xs italic">{errorMessage}</p>
 
-			<div class="flex items-center justify-center">
+			<div class="flex items-center justify-center w-full mb-2">
 				<button
 					disabled={loading}
 					on:click={handleSignIn}
 					id="login-button"
-					class="specialBtnDark hover:bg-red-900 py-2 px-4 rounded focus:outline-none sm:px-20">Login</button
+					class="specialBtnDark hover:bg-red-900 py-2 px-4 rounded focus:outline-none w-full">Login</button
+				>
+			</div>
+
+			<div class="flex items-center justify-center w-full">
+				<button
+					disabled={loading}
+					on:click={handleForget}
+					id="login-button"
+					class="specialBtn py-2 px-4 rounded focus:outline-none w-full">Forget Password</button
 				>
 			</div>
 

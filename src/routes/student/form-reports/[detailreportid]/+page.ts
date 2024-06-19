@@ -1,16 +1,18 @@
 import type { PageLoad } from './$types';
 
-export const load: PageLoad = async ({ parent, url, params, depends }) => {
-	depends('student:reports'); // Assuming you need this dependency
+export const load: PageLoad = async ({ parent, params }) => {
+    const { supabase } = await parent();
 
-	const { supabase } = await parent();
+    // Fetch report data based on reportid
+    const { data: reports, error } = await supabase
+        .from('reports')
+        .select('*')
+        .eq('id', params.detailreportid)
+        .single();
 
-	// Fetch report data based on reportid
-	const { data: reports, error } = await supabase
-		.from('report_users_view')
-		.select('*')
-		.eq('report_id', params.detailreportid)
-		.single();
+    if (error) {
+        console.error('Error fetching report:', error);
+    }
 
-	return { reports };
+    return { reports };
 };

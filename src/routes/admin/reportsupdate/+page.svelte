@@ -51,35 +51,21 @@
 								<td class="py-2 px-4 border text-center"><p class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-fullr">{_.status}</p></td>
 								<td class="py-2 px-4 border text-center">
 									<div class="flex flex-col mb-2">
-										{#if _.status == 'in progress' || _.status == 'done progress'}
+										{#if _.status === 'in progress' || _.status === 'done progress'}
 										<button
 											on:click={() => handlereportdetail(_.report_id)}
 											class="specialBtnDark hover:bg-red-900 py-2 px-4 rounded focus:outline-none sm:px-20"
 											><p class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-fullr">Detail</p></button
 										>
-										{:else}
-											<button 
-												disabled
-												class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none sm:px-20"
-											>
-											<p class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-fullr">Detail</p>
-											</button>
 										{/if}
 									</div>
 									<div class="flex flex-col">
-										{#if _.status == 'search contractor'}
+										{#if _.status === 'search contractor'}
 											<button 
 												on:click={async () => {
 													handledelete(_.id)
 												}}
 												class="border specialBtn p-2"
-											>
-												Delete
-											</button>
-										{:else}
-											<button 
-												disabled
-												class="border border-gray-500 hover:border-gray-700 bg-red p-2"
 											>
 												Delete
 											</button>

@@ -24,6 +24,10 @@
 	let kolej = '';
 	let defecttype = '';
 
+	let isFormDirty = false;
+	let showSubmitConfirm = false;
+	let showCancelConfirm = false;
+
 	let kolejoption = [
 		'KOLEJ RAHMAN PUTRA',
 		'KOLEJ TUN FATIMAH',
@@ -185,14 +189,17 @@
 		return isValid;
 	};
 
-	const handleSubmit = async () => {
-
+	function handleSubmit() {
 		if (!validateForm()) {
 			console.error('Form validation failed');
 			return;
 		}
-		// Convert severity to number
-		//const severityNumber = parseInt(severity);
+		showSubmitConfirm = true;
+	};
+
+	const confirmSubmit = async () => {
+
+		showSubmitConfirm = false;
 
 		// Upload images to Supabase Storage
 		const imageFiles = Array.from(images);
@@ -237,10 +244,40 @@
 		}
 
 		console.log('Report submitted successfully:', insertedReport);
+		alert('Submit successfully!');
 		goto('/student/form-reports');
 		description = '';
 		images = null;
 	};
+
+	function handleCancel() {
+		if (isFormDirty) {
+		showCancelConfirm = true;
+		} else {
+		// Navigate away or clear form
+		alert('Form cancelled!');
+		}
+	}
+
+	function confirmCancel() {
+		showCancelConfirm = false;
+		// Handle actual cancel logic here, like navigating away
+		alert('Form cancelled!');
+		goto('/student');
+	}
+
+	function handleInputChange() {
+		isFormDirty = true;
+	}
+
+	onMount(() => {
+		window.addEventListener('beforeunload', (event) => {
+		if (isFormDirty) {
+			event.preventDefault();
+			event.returnValue = '';
+		}
+		});
+	});
 
 	$: console.log('Changed selected:', kolej);
 	$: console.log('Updated options:', kolejoption);
@@ -261,7 +298,7 @@
     <Headers { data } />
     <div class="flex flex-col gap-10 flex-1 items-center justify-center pb-10 md:pb-14 w-full">
 		<h2 class="text-3xl sm:text-1xl md:text-2xl lg:text-3xl max-w-[1200px] mx-auto w-full text-center font-semibold">Form Report</h2>
-		<form on:submit|preventDefault={handleSubmit} class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 w-full">
+		<form on:submit|preventDefault={handleSubmit} on:input={handleInputChange} class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 w-full">
 			<div class="pb-5">
 				<p class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-full text-center font-semibold">Fill the form to report</p>
 				<hr>
@@ -452,7 +489,33 @@
 			{/if}
 
 			<button type="submit" class="px-4 py-2 mt-4 specialBtnDark hover:bg-red-900">Submit</button>
-			<a class="duration-200 hover:text-red-400 cursor-pointer" href="/student">Cancel</a>
+			<button type="button" on:click={handleCancel} class="px-4 py-2 mt-4 specialBtn">Cancel</button>
 		</form>
 	</div>
 </Sectionwrapper>
+
+{#if showSubmitConfirm}
+  <div class="modal">
+    <div class="bg-white p-6 rounded shadow-md text-center">
+      <p>Are you sure you have filled everything correctly?</p>
+      <button on:click={confirmSubmit} class="specialBtnDark hover:bg-red-900 p-2 m-2 px-4 py-2 mt-4">Yes</button>
+      <button on:click={() => (showSubmitConfirm = false)} class="specialBtn p-2 m-2 px-4 py-2 mt-4">No</button>
+    </div>
+  </div>
+{/if}
+
+{#if showCancelConfirm}
+  <div class="modal">
+    <div class="bg-white p-6 rounded shadow-md text-center">
+      <p>Are you sure you want to cancel the report?</p>
+      <button on:click={confirmCancel} class="specialBtnDark hover:bg-red-900 p-2 m-2 px-4 py-2 mt-4">Yes</button>
+      <button on:click={() => (showCancelConfirm = false)} class="specialBtn p-2 m-2 px-4 py-2 mt-4">No</button>
+    </div>
+  </div>
+{/if}
+
+<style>
+	.modal {
+		@apply fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-75;
+	}
+</style>
