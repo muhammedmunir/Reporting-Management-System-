@@ -122,10 +122,6 @@
                 errors.noblock = 'No. Block is required';
                 isValid = false;
             }
-            if (!level) {
-                errors.level = 'Level is required';
-                isValid = false;
-            }
             if (!description) {
                 errors.description = 'Description is required';
                 isValid = false;
