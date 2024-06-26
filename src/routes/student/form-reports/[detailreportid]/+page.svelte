@@ -148,8 +148,10 @@
 	};
 
 	const confirmSubmit = async (event) => {
-
 		showSubmitConfirm = false;
+
+        const currentTime = new Date().toISOString();
+
         if (!validateForm()) {
             console.error('Form validation failed');
             return;
@@ -190,6 +192,7 @@
         const { error } = await supabase.from('reports').update({
             images: extractFullPath(imageUrls),
             status: 'pending',
+            updated_at: currentTime,
             ...updatedData
         }).eq('id', reports.id);
 

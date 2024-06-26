@@ -9,7 +9,7 @@ export const load = (async ({ parent, url, depends }) => {
 		.select(`*`)
 		.eq('status', 'in progress')
 		.eq('handleby', session?.user.id)
-		.order('created_at', { ascending: true });
+		.order('updated_at', { ascending: false });
 
 	return { reports };
 }) satisfies PageLoad;

@@ -11,7 +11,7 @@ export const load = (async ({ parent, url, depends }) => {
 		.not('status', 'eq', 'rejected')
 		.not('status', 'eq', 'search contractor')
 		.not('status', 'eq', 'in progress')
-		.order('created_at', { ascending: true });
+		.order('updated_at', { ascending: false });
 
 	return { reports };
 }) satisfies PageLoad;

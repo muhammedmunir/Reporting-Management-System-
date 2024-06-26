@@ -27,10 +27,11 @@
 	};
 
 	const updateReportStatus = async () => {
-
 		showSubmitConfirm = false;
 
-		await supabase.from('reports').update({ status: 'complete' }).eq('id', reportIdToconfirm);
+		const currentTime = new Date().toISOString();
+
+		await supabase.from('reports').update({ status: 'complete', updated_at: currentTime }).eq('id', reportIdToconfirm);
 
 		const { data: user_profile } = await supabase
 			.from('profiles')

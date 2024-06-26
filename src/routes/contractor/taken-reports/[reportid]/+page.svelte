@@ -42,6 +42,10 @@
 	}
 
     async function handleSubmit(event) {
+        showSubmitConfirm = false;
+        
+        const currentTime = new Date().toISOString();
+        
         event.preventDefault();
 
         if (!validateForm()) {
@@ -79,7 +83,8 @@
         const { error } = await supabase.from('reports').update({
             images: extractFullPath(imageUrls),
             status: 'done progress',
-            handleby: session?.user.id
+            handleby: session?.user.id,
+            updated_at: currentTime
         }).eq('id', showSubmitConfirm);
 
         if (error) {

@@ -8,7 +8,7 @@ export const load = (async ({ parent, url, depends }) => {
 		.from('reports')
 		.select(`*`)
 		.eq('status', 'search contractor')
-		.order('created_at', { ascending: false });
+		.order('updated_at', { ascending: false });
 
 	return { reports };
 }) satisfies PageLoad;

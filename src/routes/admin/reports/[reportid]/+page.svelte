@@ -91,19 +91,21 @@
 	const confirmreport = async () => {
 		showSubmitConfirm = false;
 
+		const currentTime = new Date().toISOString();
+
 		if (showPriceSection) {
 			if (!validateForms()) {
 				console.error('Form validation failed');
 				return;
 			}
-			await supabase.from('reports').update({ status: 'search contractor', price }).eq('id', reports.report_id);
+			await supabase.from('reports').update({ status: 'search contractor', price, updated_at: currentTime }).eq('id', reports.report_id);
 			goto('/admin/reportsupdate');
 		} else if (showCommentSection) {
 			if (!validateForm()) {
 				console.error('Form validation failed');
 				return;
 			}
-			await supabase.from('reports').update({ status: 'rejected', comment }).eq('id', reports.report_id);
+			await supabase.from('reports').update({ status: 'rejected', comment, updated_at: currentTime }).eq('id', reports.report_id);
 			goto('/admin/reports');
 		}
 	};

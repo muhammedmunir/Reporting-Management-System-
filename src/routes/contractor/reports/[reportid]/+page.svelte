@@ -60,12 +60,14 @@
     const handleSubmit = async () => {
 		showSubmitConfirm = false;
 
+        const currentTime = new Date().toISOString();
+
 		if (showdateSection) {
 			if (!validateForm()) {
 				console.error('Form validation failed');
 				return;
 			}
-			await supabase.from('reports').update({ status: 'in progress', date, handleby: session?.user.id }).eq('id', reportIdToconfirm);
+			await supabase.from('reports').update({ status: 'in progress', date, handleby: session?.user.id, updated_at: currentTime }).eq('id', reportIdToconfirm);
 			goto('/contractor/taken-reports');
 		}
 	};

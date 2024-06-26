@@ -1,3 +1,4 @@
+import { flip } from 'svelte/animate';
 import type { PageLoad } from './$types';
 
 export const load = (async ({ parent, url, depends }) => {
@@ -8,7 +9,7 @@ export const load = (async ({ parent, url, depends }) => {
 		.from('reports')
 		.select(`*`)
 		.eq('owner', session?.user.id)
-		.order('created_at', { ascending: false });
+		.order('updated_at', { ascending: false });
 
 	return { reports };
 }) satisfies PageLoad;
