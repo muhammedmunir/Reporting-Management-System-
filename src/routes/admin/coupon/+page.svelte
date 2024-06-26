@@ -14,6 +14,8 @@
 	let quantity = '';
 	let price = '';
 
+	let showSubmitConfirm = false;
+
 	let titleoption = [
 		'CENGAL',
 		'KTC',
@@ -60,11 +62,16 @@
 		return isValid;
 	};
 
-	const handleSubmit = async () => {
+	function confirmcraete() {
 		if (!validateForm()) {
 			console.error('Form validation failed');
 			return;
 		}
+		showSubmitConfirm = true;
+	};
+
+	const handleSubmit = async () => {
+		showSubmitConfirm = true;
 
 		const { data: insertedCoupon, error } = await supabase.from('coupons').insert([
 			{
@@ -89,7 +96,7 @@
     <Headers { data } />
     <div class="flex flex-col gap-10 flex-1 items-center justify-center pb-10 md:pb-14 w-full">
 		<h2 class="text-3xl sm:text-2xl md:text-3xl lg:text-4xl max-w-[1200px] mx-auto w-full text-center font-semibold">Create Coupon</h2>
-		<form on:submit|preventDefault={handleSubmit} class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 w-full">
+		<form on:submit|preventDefault={confirmcraete} class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 w-full">
 			<div class="mb-6">
 				<label for="title" class="block text-gray-700 text-sm font-bold mb-2">Arked</label>
 				<select bind:value={title} class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
@@ -130,3 +137,19 @@
 		</form>
 	</div>
 </Sectionwrapper>
+
+{#if showSubmitConfirm}
+  <div class="modal">
+    <div class="bg-white p-6 rounded shadow-md text-center">
+      <p>Are you sure this create coupon?</p>
+      <button on:click={handleSubmit} class="specialBtnDark hover:bg-red-900 p-2 m-2 px-4 py-2 mt-4">Yes</button>
+      <button on:click={() => (showSubmitConfirm = false)} class="specialBtn p-2 m-2 px-4 py-2 mt-4">No</button>
+    </div>
+  </div>
+{/if}
+
+<style>
+	.modal {
+		@apply fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-75;
+	}
+</style>

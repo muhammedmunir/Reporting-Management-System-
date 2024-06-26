@@ -13,6 +13,64 @@
 
     let latitude = reports.latitude;
     let longitude = reports.longitude;
+
+    let showApprovalOptions = true;
+	let showdateSection = false;
+	let date = '';
+
+    let showSubmitConfirm = false;
+	let reportIdToconfirm: any = null;
+
+    const take = () => {
+		showApprovalOptions = false;
+		showdateSection = true;
+	};
+
+    const cancel = () => {
+        showdateSection = false;
+        showApprovalOptions = true;
+    };
+    
+    let errors = {
+		date: ''
+	};
+
+	const validateForm = () => {
+		let isValid = true;
+		errors = {
+			date: ''
+		};
+
+		if (!date) {
+			errors.date = 'date is required';
+			isValid = false;
+		}
+		return isValid;
+	};
+    
+    function confirmSubmit(id: any) {
+		if (!validateForm()) {
+            console.error('Form validation failed');
+            return;
+		}
+        reportIdToconfirm = id;
+		showSubmitConfirm = true;
+	}
+
+    const handleSubmit = async () => {
+		showSubmitConfirm = false;
+
+		if (showdateSection) {
+			if (!validateForm()) {
+				console.error('Form validation failed');
+				return;
+			}
+			await supabase.from('reports').update({ status: 'in progress', date, handleby: session?.user.id }).eq('id', reportIdToconfirm);
+			goto('/contractor/taken-reports');
+		}
+	};
+
+
 </script>
 
 <svelte:head>
@@ -174,15 +232,40 @@
                     class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 />
             </div>
-            <button type="submit" 
-                on:click={async () => {
-                    await supabase.from('reports').update({ status: 'in progress', handleby: session?.user.id }).eq('id', reports.report_id);
-                    goto(`/contractor/taken-reports`);
-                }}
-                class="px-4 py-2 mt-4 specialBtnDark hover:bg-red-900"
-                >Take Job</button
-            >
-            <a class="duration-200 hover:text-red-400 cursor-pointer" href="/contractor/reports">Cancel</a>
+            <!-- Approval buttons -->
+            {#if showApprovalOptions}
+                <button type="button" on:click={take} class="px-4 py-2 mt-4 specialBtnDark rounded hover:bg-red-900">Take Job</button>
+                <a href="/contractor/reports" class="duration-200 hover:text-red-400 cursor-pointer">Back</a>
+            {/if}
+            <form on:submit|preventDefault={() => confirmSubmit(reports.report_id)}>
+                <!-- date section -->
+                {#if showdateSection}
+                    <div class="mb-6">
+                        <label for="date" class="block text-gray-700 text-sm font-bold mb-2">Date do Job</label>
+                        <input type="date" id="date" bind:value={date} class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
+                        {#if errors.date}<p class="text-red-500 text-xs italic">{errors.date}</p>{/if}
+                    </div>
+                    <button type="submit" class="px-4 py-2 mt-4 specialBtnDark rounded hover:bg-red-900">Confirm</button>
+                    <button type="button" on:click={cancel} class="duration-200 specialBtn cursor-pointer">Cancel</button>
+                {/if}
+            </form>
         </form>
     </div>
 </Sectionwrapper>
+
+{#if showSubmitConfirm}
+  <div class="modal">
+    <div class="bg-white p-6 rounded shadow-md text-center">
+      <p>Are you sure take this report?</p>
+      <button on:click={handleSubmit} class="specialBtnDark hover:bg-red-900 p-2 m-2 px-4 py-2 mt-4">Yes</button>
+      <button on:click={() => (showSubmitConfirm = false)} class="specialBtn p-2 m-2 px-4 py-2 mt-4">No</button>
+    </div>
+  </div>
+{/if}
+
+
+<style>
+	.modal {
+		@apply fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-75;
+	}
+</style>

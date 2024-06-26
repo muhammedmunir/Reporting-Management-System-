@@ -15,6 +15,9 @@
     let latitude = reports.latitude;
     let longitude = reports.longitude;
 
+    let showSubmitConfirm = false;
+    let reportIdToconfirm: any = null;
+
     let images = writable<FileList | null>(null);
     let errors = writable({ images: '' });
 
@@ -28,6 +31,15 @@
         }
         return isValid;
     };
+    
+    function confirmSubmit(id: any) {
+		if (!validateForm()) {
+            console.error('Form validation failed');
+            return;
+		}
+        reportIdToconfirm = id;
+		showSubmitConfirm = true;
+	}
 
     async function handleSubmit(event) {
         event.preventDefault();
@@ -68,7 +80,7 @@
             images: extractFullPath(imageUrls),
             status: 'done progress',
             handleby: session?.user.id
-        }).eq('id', reports.report_id);
+        }).eq('id', showSubmitConfirm);
 
         if (error) {
             console.error('Error updating report:', error.message);
@@ -89,7 +101,7 @@
     <Headers { data } />
     <div class="rounded px-8 pt-6 flex-col gap-10 flex-1 items-center justify-center pb-10 md:pb-14 w-full">
         <h2 class="text-3xl sm:text-1xl md:text-2xl lg:text-3xl max-w-[1200px] mx-auto w-full text-center font-semibold">Detail Report</h2>
-        <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 w-full" on:submit|preventDefault={handleSubmit}>
+        <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 w-full" on:submit|preventDefault={() => confirmSubmit(reports.report_id)}>
             {#if reports.owner_username}
                 <div class="mb-6">
                     <label for="studentname" class="block text-gray-700 text-sm font-bold mb-2">Student Name</label>
@@ -228,6 +240,7 @@
                     />
                 </div>
             {/if}
+            {#if reports.price}
             <div class="mb-6">
                 <label for="price" class="block text-gray-700 text-sm font-bold mb-2">Price(RM)</label>
                 <input
@@ -238,6 +251,19 @@
                     class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 />
             </div>
+            {/if}
+            {#if reports.date}
+            <div class="mb-6">
+                <label for="date" class="block text-gray-700 text-sm font-bold mb-2">Date to Job</label>
+                <input
+                    disabled
+                    id="date"
+                    type="text"
+                    bind:value={reports.date}
+                    class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                />
+            </div>
+            {/if}
             <div class="mb-6">
                 <label for="images" class="block text-gray-700 text-sm font-bold mb-2">Upload New Images</label>
                 <input 
@@ -258,3 +284,20 @@
         </form>
     </div>
 </Sectionwrapper>
+
+{#if showSubmitConfirm}
+  <div class="modal">
+    <div class="bg-white p-6 rounded shadow-md text-center">
+      <p>Are you sure done job?</p>
+      <button on:click={handleSubmit} class="specialBtnDark hover:bg-red-900 p-2 m-2 px-4 py-2 mt-4">Yes</button>
+      <button on:click={() => (showSubmitConfirm = false)} class="specialBtn p-2 m-2 px-4 py-2 mt-4">No</button>
+    </div>
+  </div>
+{/if}
+
+
+<style>
+	.modal {
+		@apply fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-75;
+	}
+</style>

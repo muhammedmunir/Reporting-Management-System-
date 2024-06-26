@@ -88,7 +88,7 @@
 <header class="flex flex-col relative z-20">
     <div class="max-w-[1400px] mx-auto w-full flex items-center justify-between p-4 py-6">
         <a href="/admin">
-            <h1 class="font-semibold">UTM<span class="text-red-400">Complaint</span></h1>
+            <h1 class="font-semibold">UTM<span class="text-red-700">Complaint</span></h1>
         </a>
         <button on:click={ () => ($openModal = true) } class="md:hidden grid place-items-center">
             <i class="fa-solid fa-bars" />

@@ -10,6 +10,9 @@
 	let { supabase, session } = data;
 	$: ({ supabase, session } = data);
 
+	let currentPage = 1;
+	const rowsPerPage = 5;
+
 	function reroute(href) {
 		window.location.href = href;
 	};
@@ -18,10 +21,19 @@
 		goto(`/admin/coupons/${id}`);
 	};
 
-	const handledelete = async () => {
-		await supabase.from('reports').delete().eq('id', _.id);
-		invalidate('admin:reports');
-	};
+	function nextPage() {
+		if (currentPage < Math.ceil(coupons.length / rowsPerPage)) {
+			currentPage += 1;
+		}
+	}
+
+	function previousPage() {
+		if (currentPage > 1) {
+			currentPage -= 1;
+		}
+	}
+
+	$: data.coupons = coupons.slice((currentPage - 1) * rowsPerPage, currentPage * rowsPerPage);
 </script>
 
 <Sectionwrapper>
@@ -67,20 +79,22 @@
 											><p class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-fullr">Edit</p></button
 										>
 									</div>
-									<div class="flex flex-col">
-										<button
-											on:click={() => handledelete()}
-											class="specialBtn py-2 px-4 rounded focus:outline-none sm:px-20"
-											><p class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-fullr">Delete</p></button
-										>
-									</div>
 								</td>						
 							</tr>
 						{/each}
 					</tbody>
 				</table>
+				<div class="flex justify-between mt-4">
+					<button on:click={previousPage} disabled={currentPage === 1} class="specialBtnDark hover:bg-red-900">
+						&larr;
+					</button>
+					<p class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w/[1200px] mx-auto w/full font-semibold">Page {currentPage} of {Math.ceil(coupons.length / rowsPerPage)}</p>
+					<button on:click={nextPage} disabled={currentPage === Math.ceil(coupons.length / rowsPerPage)} class="specialBtnDark hover:bg-red-900">
+						&rarr;
+					</button>
+				</div>
 			{:else}
-			<p class="text-12l sm:text-1xl md:text-2xl lg:text-2xl max-w-[1200px] mx-auto w-full text-center font-semibold">No available complete</p>
+			<p class="text-12l sm:text-1xl md:text-2xl lg:text-2xl max-w-[1200px] mx-auto w-full text-center font-semibold">No available coupon</p>
 			{/if}
 		</div>
 	</div>

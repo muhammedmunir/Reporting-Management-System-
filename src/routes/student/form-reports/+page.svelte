@@ -97,10 +97,11 @@
 				</table>
 				<div class="flex justify-between mt-4">
 					<button on:click={previousPage} disabled={currentPage === 1} class="specialBtnDark hover:bg-red-900">
-						Previous
+						&larr;
 					</button>
+					<p class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w/[1200px] mx-auto w/full font-semibold">Page {currentPage} of {Math.ceil(reports.length / rowsPerPage)}</p>
 					<button on:click={nextPage} disabled={currentPage === Math.ceil(reports.length / rowsPerPage)} class="specialBtnDark hover:bg-red-900">
-						Next
+						&rarr;
 					</button>
 				</div>
 			{:else}

@@ -6,23 +6,36 @@
     import Headers from '../component/header.svelte';
 	
 	export let data: PageData;
+	let reports = data.reports;
 	let { supabase, session } = data;
 	$: ({ supabase, session } = data);
+
+	let currentPage = 1;
+	const rowsPerPage = 5;
 
 	const handlereportdetail = async (report_id: any) => {
 		goto(`/admin/reportsupdate/${report_id}`);
 	};
 
-	const handledelete = async (id) => {
-		await supabase.from('reports').delete().eq('id', id);
-		invalidate('admin:reports');
-	};
+	function nextPage() {
+		if (currentPage < Math.ceil(reports.length / rowsPerPage)) {
+			currentPage += 1;
+		}
+	}
+
+	function previousPage() {
+		if (currentPage > 1) {
+			currentPage -= 1;
+		}
+	}
+
+	$: data.reports = reports.slice((currentPage - 1) * rowsPerPage, currentPage * rowsPerPage);
 </script>
 
 <Sectionwrapper>
     <Headers { data } />
     <div class="flex flex-col gap-10 flex-1 items-center justify-center pb-10 md:pb-14 w-full">
-		<h2 class="text-3xl sm:text-2xl md:text-3xl lg:text-4xl max-w-[1200px] mx-auto w-full text-center font-semibold">New Reports</h2>
+		<h2 class="text-3xl sm:text-2xl md:text-3xl lg:text-4xl max-w-[1200px] mx-auto w-full text-center font-semibold">Update Reports</h2>
 		{#if data.reports?.length > 0}
 			<div class="overflow-x-auto w-full">
 				<div class="flex flex-row justify-between w-full">
@@ -51,31 +64,26 @@
 								<td class="py-2 px-4 border text-center"><p class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-fullr">{_.status}</p></td>
 								<td class="py-2 px-4 border text-center">
 									<div class="flex flex-col mb-2">
-										{#if _.status === 'in progress' || _.status === 'done progress'}
 										<button
 											on:click={() => handlereportdetail(_.report_id)}
 											class="specialBtnDark hover:bg-red-900 py-2 px-4 rounded focus:outline-none sm:px-20"
 											><p class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-fullr">Detail</p></button
 										>
-										{/if}
-									</div>
-									<div class="flex flex-col">
-										{#if _.status === 'search contractor'}
-											<button 
-												on:click={async () => {
-													handledelete(_.id)
-												}}
-												class="border specialBtn p-2"
-											>
-												Delete
-											</button>
-										{/if}
 									</div>
 								</td>
 							</tr>
 						{/each}
 					</tbody>
 				</table>
+				<div class="flex justify-between mt-4">
+					<button on:click={previousPage} disabled={currentPage === 1} class="specialBtnDark hover:bg-red-900">
+						&larr;
+					</button>
+					<p class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w/[1200px] mx-auto w/full font-semibold">Page {currentPage} of {Math.ceil(reports.length / rowsPerPage)}</p>
+					<button on:click={nextPage} disabled={currentPage === Math.ceil(reports.length / rowsPerPage)} class="specialBtnDark hover:bg-red-900">
+						&rarr;
+					</button>
+				</div>
 			</div>
 		{:else}
 		<p class="text-12l sm:text-1xl md:text-2xl lg:text-2xl max-w-[1200px] mx-auto w-full text-center font-semibold">No available update report</p>

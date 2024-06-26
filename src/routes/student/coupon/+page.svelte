@@ -77,7 +77,6 @@
                         {#if !claimedCoupon.used}
                             <div class="border p-4 rounded-lg shadow-sm hover:shadow-md">
                                 <h3 class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-full text-center font-semibold">{claimedCoupon.coupons.title}</h3>
-                                <p class="mt-2 text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-full">{formatDate(claimedCoupon.coupons.description)}</p>
                                 <p class="mt-2 text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-full">Price: RM{claimedCoupon.coupons.price.toFixed(2)}</p>
                                 <p class="mt-2 text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-full">Claimed at: {new Date(claimedCoupon.claimed_at).toLocaleString()}</p>
                                 <button class="mt-4 px-4 py-2 rounded specialBtnDark hover:bg-red-900"

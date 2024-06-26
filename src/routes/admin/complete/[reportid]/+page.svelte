@@ -169,6 +169,30 @@
                     />
                 </div>
             {/if}
+            {#if reports.price}
+            <div class="mb-6">
+                <label for="price" class="block text-gray-700 text-sm font-bold mb-2">Price(RM)</label>
+                <input
+                    disabled
+                    id="price"
+                    type="text"
+                    bind:value={reports.price}
+                    class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                />
+            </div>
+            {/if}
+            {#if reports.date}
+            <div class="mb-6">
+                <label for="date" class="block text-gray-700 text-sm font-bold mb-2">Date to Job</label>
+                <input
+                    disabled
+                    id="date"
+                    type="text"
+                    bind:value={reports.date}
+                    class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                />
+            </div>
+            {/if}
             <div class="mb-6">
                 <label for="price" class="block text-gray-700 text-sm font-bold mb-2">Price(RM)</label>
                 <input

@@ -27,6 +27,7 @@
     let defecttype = reports.defecttype || '';
 
     let editMode = false;
+    
 	let showSubmitConfirm = false;
 
     let showConfirmdelete = false;
@@ -146,7 +147,7 @@
 		showSubmitConfirm = true;
 	};
 
-	const confirmSubmit = async () => {
+	const confirmSubmit = async (event) => {
 
 		showSubmitConfirm = false;
         if (!validateForm()) {
@@ -183,8 +184,8 @@
         }
 
         function extractFullPath(data) {
-            return data.map((item) => item.path);
-        }
+			return data.map((item) => item.fullPath);
+		}
 
         const { error } = await supabase.from('reports').update({
             images: extractFullPath(imageUrls),
@@ -205,13 +206,27 @@
 		showConfirmdelete = true;
 	};
 
-	const confirmdelete = async (id: any) => {
-		showConfirmdelete = false;
+	const confirmdelete = async () => {
+        try {
+            showConfirmdelete = false;
 
-		await supabase.from('reports').delete().eq('id', id);
-		invalidate('student:reports');
-		reportIdToDelete = null;
-	};
+            const { error } = await supabase.from('reports').delete().eq('id', reportIdToDelete);
+
+            if (error) {
+                console.error('Error deleting report:', error.message);
+            } else {
+                console.log('Report deleted successfully');
+                await invalidate('student:reports'); // Ensure invalidation completes before navigating
+                console.log('Reports invalidated');
+                await goto('/student/form-reports'); // Await goto to ensure navigation happens
+                console.log('Navigation to /student/form-reports triggered');
+            }
+
+            reportIdToDelete = null;
+        } catch (err) {
+            console.error('Unexpected error during report deletion:', err);
+        }
+    };
 </script>
 
 <svelte:head>
@@ -342,6 +357,18 @@
                         class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                     />
                 </div>
+            {/if}
+            {#if reports.date}
+            <div class="mb-6">
+                <label for="date" class="block text-gray-700 text-sm font-bold mb-2">Date to Job</label>
+                <input
+                    disabled
+                    id="date"
+                    type="text"
+                    bind:value={reports.date}
+                    class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                />
+            </div>
             {/if}
             {#if reports.status === 'rejected'}
             <div class="mb-6">

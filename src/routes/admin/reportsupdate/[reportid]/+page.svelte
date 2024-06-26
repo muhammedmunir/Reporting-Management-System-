@@ -4,7 +4,8 @@
 	import Map from './Map.svelte';
 	import Sectionwrapper from '../../component/sectionwrapper.svelte';
     import Headers from '../../component/header.svelte';
-
+	import { invalidate } from '$app/navigation';
+	
 	export let data: PageData;
 	let reports = data.reports;
 	console.log(reports);
@@ -14,8 +15,22 @@
 	let latitude = reports.latitude;
 	let longitude = reports.longitude;
 
-	const updateReportStatus = async (status: string) => {
-		await supabase.from('reports').update({ status }).eq('id', reports.report_id);
+	let showSubmitConfirm = false;
+
+    let showConfirmdelete = false;
+	let reportIdToDelete: any = null;
+	let reportIdToconfirm: any = null;
+
+	function confirmreport(id: any) {
+		reportIdToconfirm = id;
+		showSubmitConfirm = true;
+	};
+
+	const updateReportStatus = async () => {
+
+		showSubmitConfirm = false;
+
+		await supabase.from('reports').update({ status: 'complete' }).eq('id', reportIdToconfirm);
 
 		const { data: user_profile } = await supabase
 			.from('profiles')
@@ -27,20 +42,47 @@
 			.from('profiles')
 			.update({ points: newpoints })
 			.eq('id', reports.owner_id);
-
+		/*
 		const { data: user_profile_contractor } = await supabase
 			.from('profiles')
 			.select('*')
-			.eq('id', reports.handleby_id)
+			.eq('id', reports.handler_id)
 			.single();
 		let contractor_newpoints = user_profile_contractor.points + 10;
 		await supabase
 			.from('profiles')
 			.update({ points: contractor_newpoints })
-			.eq('id', reports.handleby_id);
-
+			.eq('id', reports.handler_id);
+		*/
 		goto(`/admin/complete`);
 	};
+
+	function handlereportdelete(id: any) {
+		reportIdToDelete = id;
+		showConfirmdelete = true;
+	};
+
+	const confirmdelete = async () => {
+        try {
+            showConfirmdelete = false;
+
+            const { error } = await supabase.from('reports').delete().eq('id', reportIdToDelete);
+
+            if (error) {
+                console.error('Error deleting report:', error.message);
+            } else {
+                console.log('Report deleted successfully');
+                await invalidate('admin:reports'); // Ensure invalidation completes before navigating
+                console.log('Reports invalidated');
+                await goto('/admin/reportsupdate'); // Await goto to ensure navigation happens
+                console.log('Navigation to /admin/reportsupdate triggered');
+            }
+
+            reportIdToDelete = null;
+        } catch (err) {
+            console.error('Unexpected error during report deletion:', err);
+        }
+    };
 </script>
 
 <svelte:head>
@@ -156,14 +198,73 @@
 					/>
 				</div>
 			{/if}
+            {#if reports.price}
+            <div class="mb-6">
+                <label for="price" class="block text-gray-700 text-sm font-bold mb-2">Price(RM)</label>
+                <input
+                    disabled
+                    id="price"
+                    type="text"
+                    bind:value={reports.price}
+                    class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                />
+            </div>
+            {/if}
+            {#if reports.date}
+            <div class="mb-6">
+                <label for="date" class="block text-gray-700 text-sm font-bold mb-2">Date to Job</label>
+                <input
+                    disabled
+                    id="date"
+                    type="text"
+                    bind:value={reports.date}
+                    class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                />
+            </div>
+            {/if}
+			<div class="flex items-center justify-between">
+			{#if reports.status === 'done progress'}
 			<button
 				type="button"
-				on:click={() => updateReportStatus('complete')}
+				on:click={() => confirmreport(reports.report_id)}
 				class="px-4 py-2 mt-4 specialBtnDark rounded hover:bg-red-900"
 			>
 				Complete
 			</button>
-			<a class="duration-200 hover:text-red-400 cursor-pointer" href="/admin/reportsupdate">Cancel</a>
+			{/if}
+			{#if reports.status === 'search contractor'}
+				<button on:click={() => handlereportdelete(reports.report_id)} class="specialBtn p-2">
+					<p class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-fullfont-semibold">Delete</p>
+				</button>
+			{/if}
+			<a class="duration-200 hover:text-red-400 cursor-pointer" href="/admin/reportsupdate">Back</a>
+		</div>
 		</form>
 	</div>
 </Sectionwrapper>
+
+{#if showSubmitConfirm}
+  <div class="modal">
+    <div class="bg-white p-6 rounded shadow-md text-center">
+      <p>Are you sure this report complete?</p>
+      <button on:click={updateReportStatus} class="specialBtnDark hover:bg-red-900 p-2 m-2 px-4 py-2 mt-4">Yes</button>
+      <button on:click={() => (showSubmitConfirm = false)} class="specialBtn p-2 m-2 px-4 py-2 mt-4">No</button>
+    </div>
+  </div>
+{/if}
+
+{#if showConfirmdelete}
+  <div class="modal fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
+    <div class="bg-white p-6 rounded shadow-md text-center">
+      <p>Are you sure you want to delete this report?</p>
+      <button on:click={confirmdelete} class="specialBtnDark hover:bg-red-900 p-2 m-2 px-4 py-2 mt-4">Yes</button>
+      <button on:click={() => (showConfirmdelete = false)} class="specialBtn p-2 m-2 px-4 py-2 mt-4">No</button>
+    </div>
+  </div>
+{/if}
+
+<style>
+	.modal {
+		@apply fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-75;
+	}
+</style>

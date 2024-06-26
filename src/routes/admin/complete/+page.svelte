@@ -5,12 +5,30 @@
     import Headers from '../component/header.svelte';
 
 	export let data: PageData;
+	let reports = data.reports;
 	let { supabase, session } = data;
 	$: ({ supabase, session } = data);
+
+	let currentPage = 1;
+	const rowsPerPage = 5;
 
 	const handlereportdetail = async (id: any) => {
 		goto(`/admin/complete/${id}`);
 	};
+
+	function nextPage() {
+		if (currentPage < Math.ceil(reports.length / rowsPerPage)) {
+			currentPage += 1;
+		}
+	}
+
+	function previousPage() {
+		if (currentPage > 1) {
+			currentPage -= 1;
+		}
+	}
+
+	$: data.reports = reports.slice((currentPage - 1) * rowsPerPage, currentPage * rowsPerPage);
 </script>
 
 <Sectionwrapper>
@@ -56,6 +74,15 @@
 						{/each}
 					</tbody>
 				</table>
+				<div class="flex justify-between mt-4">
+					<button on:click={previousPage} disabled={currentPage === 1} class="specialBtnDark hover:bg-red-900">
+						&larr;
+					</button>
+					<p class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w/[1200px] mx-auto w/full font-semibold">Page {currentPage} of {Math.ceil(reports.length / rowsPerPage)}</p>
+					<button on:click={nextPage} disabled={currentPage === Math.ceil(reports.length / rowsPerPage)} class="specialBtnDark hover:bg-red-900">
+						&rarr;
+					</button>
+				</div>
 			</div>
 		{:else}
 			<p class="text-12l sm:text-1xl md:text-2xl lg:text-2xl max-w-[1200px] mx-auto w-full text-center font-semibold">No available complete</p>
