@@ -188,6 +188,7 @@
         const { error } = await supabase.from('reports').update({
             images: extractFullPath(imageUrls),
             status: 'pending',
+            comment: 'null',
             updated_at: currentTime,
             ...updatedData
         }).eq('id', reports.id);
@@ -394,9 +395,11 @@
                             Save
                         </button>
                     {/if}
+                    {#if !editMode}
                     <button on:click={() => handlereportdelete(reports.id)} class="specialBtn p-2">
                         <p class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-fullfont-semibold">Delete</p>
                     </button>
+                    {/if}
                 {/if}
                 <a href="/student/form-reports" class="duration-200 hover:text-red-400 cursor-pointer">Back</a>
             </div>
