@@ -23,6 +23,7 @@
 	let noroom = '';
 	let kolej = '';
 	let defecttype = '';
+	let blockoptions = [];
 
 	let isFormDirty = false;
 	let showSubmitConfirm = false;
@@ -39,6 +40,7 @@
 		'KOLEJ 9 DAN 10',
 		'KOLEJ DATIN SERI ENDON',
 		'KOLEJ DATO ONN JAAFAR',
+		'KOLEJ TUN GHAFAR BABA'
 	];
 
 	let defecttypeoption = [
@@ -46,6 +48,143 @@
 		'Electrical Issues',
 		'Plumbing Issues',
 	];
+
+	let krpoption = [
+		'G08',
+		'G09',
+		'G13',
+		'G17',
+		'G20',
+		'G22',
+		'G23',
+		'G25',
+		'G26',
+		'G29',
+		'G30'
+	];
+
+	let ktfoption = [
+		'BLOK A',
+		'BLOK B',
+		'BLOK C',
+		'BLOK D'
+	];
+
+	let kthooption = [
+		'K11',
+		'K13',
+		'K14',
+		'K15',
+		'K16',
+		'K17',
+		'K18',
+		'K21',
+		'K22',
+		'K23',
+		'K24',
+		'K26',
+		'K27',
+		'K35',
+		'K36',
+		'K37',
+		'K38'
+	];
+
+	let ktroption = [
+		'L20',
+		'L21',
+		'L25',
+		'L26'
+	];
+
+	let ktdioption = [
+		'M20',
+		'M21'
+	];
+
+	let ktcoption = [
+		'S12',
+		'S13',
+		'S20',
+		'S22',
+		'S24'
+	];
+
+	let kpoption = [
+		'U3',
+		'U4',
+		'U5',
+		'U7',
+		'U8'
+	];
+
+	let k9d10option = [
+		'K9',
+		'K10'
+	];
+
+	let kdseoption = [
+		'W1',
+		'W2',
+		'W3',
+		'WA1',
+		'WA2',
+		'WA3'
+	];
+
+	let kdojoption = [
+		'XB1',
+		'XB2',
+		'XC2'
+	];
+
+	let ktgboption = [
+		'BLOCK A',
+		'BLOCK B',
+		'BLOCK C',
+		'BLOCK D'
+	];
+
+	$: {
+        switch (kolej) {
+            case 'KOLEJ RAHMAN PUTRA':
+                blockoptions = krpoption;
+                break;
+            case 'KOLEJ TUN FATIMAH':
+                blockoptions = ktfoption;
+                break;
+            case 'KOLEJ TUN RAZAK':
+                blockoptions = ktroption;
+                break;
+            case 'KOLEJ TUN HUSSEIN ONN':
+                blockoptions = kthooption;
+                break;
+            case 'KOLEJ TUN DR. ISMAIL':
+                blockoptions = ktdioption;
+                break;
+            case 'KOLEJ TUANKU CANSELOR':
+                blockoptions = ktcoption;
+                break;
+            case 'KOLEJ PERDANA':
+                blockoptions = kpoption;
+                break;
+            case 'KOLEJ 9 DAN 10':
+                blockoptions = k9d10option;
+                break;
+            case 'KOLEJ DATIN SERI ENDON':
+                blockoptions = kdseoption;
+                break;
+            case 'KOLEJ DATO ONN JAAFAR':
+                blockoptions = kdojoption;
+                break;
+            case 'KOLEJ TUN GHAFAR BABA':
+                blockoptions = ktgboption;
+                break;
+            default:
+                blockoptions = [];
+                break;
+        };
+    };
 
 	let errors = {
 		kolej: '',
@@ -347,7 +486,11 @@
 				<div class="flex mb-6">
 					<div class="w-1/2 pr-2">
 						<label for="noblock" class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-full text-center font-semibold">No. Block</label>
-						<input id="noblock" type="text" bind:value={noblock} placeholder="Type your No. Block here" class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
+						<select bind:value={noblock} class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+							{#each blockoptions as value}
+								<option value={value}>{value}</option>
+							{/each}
+						</select>
 						{#if errors.noblock}<p class="text-red-500 text-xs italic">{errors.noblock}</p>{/if}
 					</div>
 					<div class="w-1/2 pl-2">
@@ -394,7 +537,11 @@
 				<div class="flex mb-6">
 					<div class="w-1/2 pr-2">
 						<label for="noblock" class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-full text-center font-semibold">No. Block</label>
-						<input id="noblock" type="text" bind:value={noblock} placeholder="Type your No. Block here" class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
+						<select bind:value={noblock} class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+							{#each blockoptions as value}
+								<option value={value}>{value}</option>
+							{/each}
+						</select>
 						{#if errors.noblock}<p class="text-red-500 text-xs italic">{errors.noblock}</p>{/if}
 					</div>
 					<div class="w-1/2 pl-2">
@@ -424,7 +571,11 @@
 				<div class="mb-6">
 					<div>
 						<label for="noblock" class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-full text-center font-semibold">No. Block</label>
-						<input id="noblock" type="text" bind:value={noblock} placeholder="Type your No. Block here" class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
+						<select bind:value={noblock} class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+							{#each blockoptions as value}
+								<option value={value}>{value}</option>
+							{/each}
+						</select>
 						{#if errors.noblock}<p class="text-red-500 text-xs italic">{errors.noblock}</p>{/if}
 					</div>
 				</div>
@@ -467,7 +618,11 @@
 				<div class="mb-6">
 					<div>
 						<label for="noblock" class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-full text-center font-semibold">No. Block</label>
-						<input id="noblock" type="text" bind:value={noblock} placeholder="Type your No. Block here" class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
+						<select bind:value={noblock} class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+							{#each blockoptions as value}
+								<option value={value}>{value}</option>
+							{/each}
+						</select>
 						{#if errors.noblock}<p class="text-red-500 text-xs italic">{errors.noblock}</p>{/if}
 					</div>
 				</div>
