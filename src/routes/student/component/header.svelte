@@ -7,10 +7,10 @@
     let { supabase, session } = data;
 	$: ({ supabase, session } = data);
 
-    let y;
+    let y: any;
 	$: outerHeight = 0;
 
-	function reroute(href) {
+	function reroute(href: string) {
 		$openModal = false;
 		window.location.href = href;
 	};

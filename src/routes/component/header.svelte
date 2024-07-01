@@ -1,9 +1,13 @@
 <script>
+// @ts-nocheck
+
     import { openModal } from "../store";
 
+    // @ts-ignore
     let y;
 	$: outerHeight = 0;
 
+	// @ts-ignore
 	function reroute(href) {
 		$openModal = false;
 		window.location.href = href;

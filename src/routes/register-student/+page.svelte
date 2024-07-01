@@ -17,6 +17,8 @@
 	let loading = false;
 	let role = 'student';
 	let phone = '';
+	let showPassword = false;
+	let showConfirmPassword = false;
 
 	let errors = {
 		email: '',
@@ -40,12 +42,31 @@
 			phone: ''
 		};
 
+		const symbolRegex = /[!@#$%^&*(),.?":{}|<>]/;
+		const uppercaseRegex = /[A-Z]/;
+		const lowercaseRegex = /[a-z]/;
+
 		if (!email) {
 			errors.email = 'Email is required';
+			isValid = false;
+		} else if (!email.endsWith('@graduate.utm.my')) {
+			errors.email = 'Email must end with @graduate.utm.my';
 			isValid = false;
 		}
 		if (!password) {
 			errors.password = 'Password type is required';
+			isValid = false;
+		} else if (password.length < 8) {
+			errors.password = 'Password must be at least 8 characters';
+			isValid = false;
+		} else if (!symbolRegex.test(password)) {
+			errors.password = 'Password must contain at least 1 symbol';
+			isValid = false;
+		} else if (!uppercaseRegex.test(password)) {
+			errors.password = 'Password must contain at least 1 uppercase letter';
+			isValid = false;
+		} else if (!lowercaseRegex.test(password)) {
+			errors.password = 'Password must contain at least 1 lowercase letter';
 			isValid = false;
 		}
 		if (!confirmPassword) {
@@ -58,6 +79,9 @@
 		}
 		if (!matrikID) {
 			errors.matrikID = 'Matric is required';
+			isValid = false;
+		} else if (matrikID.length !== 9) {
+			errors.matrikID = 'Matric ID must be 9 characters';
 			isValid = false;
 		}
 		if (!full_name) {
@@ -114,6 +138,7 @@
 				await supabase
 					.from('profiles')
 					.update({ username, full_name, matrikID, role, phone, email })
+					// @ts-ignore
 					.eq('id', data.user.id);
 				goto('/login?message=Please confirm your email before logging in.');
 			} else {
@@ -141,7 +166,7 @@
 					type="email"
 					id="email"
 					bind:value={email}
-					placeholder="Type your email here"
+					placeholder="xxxx@graduate.utm.my"
 					class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
 				/>
 				{#if errors.email}<p class="text-red-500 text-xs italic">{errors.email}</p>{/if}
@@ -152,7 +177,7 @@
 				<input
 					id="username"
 					bind:value={username}
-					placeholder="Type your username here"
+					placeholder="Your username here"
 					class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
 				/>
 				{#if errors.username}<p class="text-red-500 text-xs italic">{errors.username}</p>{/if}
@@ -163,7 +188,7 @@
 				<input
 					id="full_name"
 					bind:value={full_name}
-					placeholder="Type your Full Name here"
+					placeholder="Your Full Name here"
 					class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
 				/>
 				{#if errors.full_name}<p class="text-red-500 text-xs italic">{errors.full_name}</p>{/if}
@@ -174,7 +199,7 @@
 				<input
 					id="matrikID"
 					bind:value={matrikID}
-					placeholder="Type your Kad Matrik here"
+					placeholder="Your No. Matrik here"
 					class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
 				/>
 				{#if errors.matrikID}<p class="text-red-500 text-xs italic">{errors.matrikID}</p>{/if}
@@ -185,7 +210,7 @@
 				<input
 					id="phone"
 					bind:value={phone}
-					placeholder="Type your No. Phone here"
+					placeholder="Your No. Phone here"
 					class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
 				/>
 				{#if errors.phone}<p class="text-red-500 text-xs italic">{errors.phone}</p>{/if}
@@ -193,25 +218,71 @@
 
 			<div class="mb-6">
 				<label class="block text-gray-700 text-sm font-bold mb-2 max-w-[1000px]" for="password">Password</label>
-				<input
-					type="password"
-					id="password"
-					bind:value={password}
-					placeholder="Type your password here"
-					class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-				/>
+				<div class="relative">
+					{#if showPassword}
+						<input
+							type="text"
+							id="password"
+							bind:value={password}
+							placeholder="Your password here"
+							class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+						/>
+					{:else}
+						<input
+							type="password"
+							id="password"
+							bind:value={password}
+							placeholder="Your password here"
+							class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+						/>
+					{/if}
+					<div>
+						<!-- svelte-ignore a11y-click-events-have-key-events -->
+						<!-- svelte-ignore a11y-no-static-element-interactions -->
+						<div class="absolute inset-y-0 right-0 px-3 py-2 cursor-pointer" on:click={() => (showPassword = !showPassword)}>
+							{#if showPassword}
+								<span class="fa-solid fa-eye"></span> <!-- Font Awesome icon for show -->
+							{:else}
+								<span class="fa-solid fa-eye-slash"></span> <!-- Font Awesome icon for hide -->
+							{/if}
+						</div>
+					</div>
+				</div>
 				{#if errors.password}<p class="text-red-500 text-xs italic">{errors.password}</p>{/if}
 			</div>
 
 			<div class="mb-6">
 				<label class="block text-gray-700 text-sm font-bold mb-2 max-w-[1000px]" for="confirmPassword">Confirm Password</label>
-				<input
-					type="password"
-					id="confirmPassword"
-					bind:value={confirmPassword}
-					placeholder="Confirm your password"
-					class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-				/>
+				<div class="relative">
+					{#if showConfirmPassword}
+						<input
+							type="text"
+							id="password"
+							bind:value={confirmPassword}
+							placeholder="Your password here"
+							class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+						/>
+					{:else}
+						<input
+							type="password"
+							id="password"
+							bind:value={confirmPassword}
+							placeholder="Your password here"
+							class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+						/>
+					{/if}
+					<div>
+						<!-- svelte-ignore a11y-click-events-have-key-events -->
+						<!-- svelte-ignore a11y-no-static-element-interactions -->
+						<div class="absolute inset-y-0 right-0 px-3 py-2 cursor-pointer" on:click={() => (showConfirmPassword = !showConfirmPassword)}>
+							{#if showConfirmPassword}
+								<span class="fa-solid fa-eye"></span>
+							{:else}
+								<span class="fa-solid fa-eye-slash"></span>
+							{/if}
+						</div>
+					</div>
+				</div>
 				{#if errors.confirmPassword}<p class="text-red-500 text-xs italic">{errors.confirmPassword}</p>{/if}
 			</div>
 
