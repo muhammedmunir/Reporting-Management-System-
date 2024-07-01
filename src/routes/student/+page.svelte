@@ -47,13 +47,13 @@
             <div class="mb-2">
                 <h4 class="text-xl sm:text-2xl md:text-2xl lg:text-2xl max-w-[1200px] mx-auto w-full text-center font-semibold">Get Started Now!</h4>
             </div>
-            <div>
+            <div class="flex gap-4 justify-center">
                 <button class="specialBtnDark hover:bg-red-900" on:click={handlemakereport}>Make a Report</button>
                 <button class="specialBtn" on:click={handleviewreport}>View Reports</button>
             </div>
         </div>
 
-        <div class="flex">
+        <div class="flex gap-4 justify-center">
             <img src={makereport} alt="Illustration of reporting" class=" w-28" />
             <img src={viewreport} alt="Illustration of tracking reports" class=" w-28" />
         </div>
