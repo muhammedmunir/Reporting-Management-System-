@@ -71,8 +71,6 @@
 			goto('/contractor/taken-reports');
 		}
 	};
-
-
 </script>
 
 <svelte:head>

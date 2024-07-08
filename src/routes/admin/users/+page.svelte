@@ -11,6 +11,7 @@
 	$: ({ supabase, session } = data);
 
 	let currentPage = 1;
+	let currentPages = 1;
 	const rowsPerPage = 5;
 
 	function nextPage() {
@@ -26,19 +27,19 @@
 	}
 
 	function nextPages() {
-		if (currentPage < Math.ceil(contractors.length / rowsPerPage)) {
-			currentPage += 1;
+		if (currentPages < Math.ceil(contractors.length / rowsPerPage)) {
+			currentPages += 1;
 		}
 	}
 
 	function previousPages() {
-		if (currentPage > 1) {
-			currentPage -= 1;
+		if (currentPages > 1) {
+			currentPages -= 1;
 		}
 	}
 
 	$: data.students = students.slice((currentPage - 1) * rowsPerPage, currentPage * rowsPerPage);
-	$: data.contractors = contractors.slice((currentPage - 1) * rowsPerPage, currentPage * rowsPerPage);
+	$: data.contractors = contractors.slice((currentPages - 1) * rowsPerPage, currentPages * rowsPerPage);
 </script>
 
 <Sectionwrapper>
@@ -68,7 +69,7 @@
 						</tr>
 					</thead>
 					<tbody class="divide-y divide-gray-200">
-						{#each students as student, index}
+						{#each data.students as student, index}
 							<tr class="hover:bg-gray-100">
 								<td class="py-2 px-4 border text-center"><p class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-fullr">{index + 1}</p></td>
 								<td class="py-2 px-4 border text-center"><p class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-fullr">{student.username}</p></td>
@@ -114,7 +115,7 @@
 						</tr>
 					</thead>
 					<tbody class="divide-y divide-gray-200">
-						{#each contractors as contractor, index}
+						{#each data.contractors as contractor, index}
 							<tr class="hover:bg-gray-100">
 								<td class="py-2 px-4 border text-center"><p class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-fullr">{index + 1}</p></td>
 								<td class="py-2 px-4 border text-center"><p class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-fullr">{contractor.username}</p></td>
@@ -125,11 +126,11 @@
 					</tbody>
 				</table>
 				<div class="flex justify-between mt-4">
-					<button on:click={previousPages} disabled={currentPage === 1} class="specialBtnDark hover:bg-red-900">
+					<button on:click={previousPages} disabled={currentPages === 1} class="specialBtnDark hover:bg-red-900">
 						&larr;
 					</button>
-					<p class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w/[1200px] mx-auto w/full font-semibold">Page {currentPage} of {Math.ceil(contractors.length / rowsPerPage)}</p>
-					<button on:click={nextPages} disabled={currentPage === Math.ceil(contractors.length / rowsPerPage)} class="specialBtnDark hover:bg-red-900">
+					<p class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w/[1200px] mx-auto w/full font-semibold">Page {currentPages} of {Math.ceil(contractors.length / rowsPerPage)}</p>
+					<button on:click={nextPages} disabled={currentPages === Math.ceil(contractors.length / rowsPerPage)} class="specialBtnDark hover:bg-red-900">
 						&rarr;
 					</button>
 				</div>

@@ -33,11 +33,12 @@ export const load = (async ({ parent, url, depends }) => {
     // Fetch apply_contractor
     const { data: contractors } = await supabase
         .from('apply_contractor')
-        .select('*');
+        .select('*')
+		.not('options', 'eq', 'rejected');
 
-    // Fetch claimed_coupons with user and coupon details
+    // Fetch history_claimed_coupons with user and coupon details
     const { data: claimed_coupons } = await supabase
-        .from('claimed_coupons')
+        .from('history_claimed_coupons')
         .select('id, claimed_at, profiles(username), coupons(title, description)')
         .order('claimed_at', { ascending: false });
 

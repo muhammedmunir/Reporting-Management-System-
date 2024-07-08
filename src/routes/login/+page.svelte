@@ -12,17 +12,6 @@
 	let password = '';
 	let errorMessage = '';
 	let loading = false;
-    /*let successMessage = '';
-
-	$: page.subscribe($page => {
-		const urlParams = new URLSearchParams($page.url.search);
-		successMessage = urlParams.get('message') || '';
-
-		// Show alert if successMessage exists
-		if (successMessage) {
-			alert(successMessage);
-		}
-	});*/
 
 	const handleSignIn = async () => {
 		if (email !== '' && password !== '') {
