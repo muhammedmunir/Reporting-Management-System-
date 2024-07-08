@@ -45,6 +45,7 @@
 		const symbolRegex = /[!@#$%^&*(),.?":{}|<>]/;
 		const uppercaseRegex = /[A-Z]/;
 		const lowercaseRegex = /[a-z]/;
+		const number = /[1234567890]/;
 
 		if (!email) {
 			errors.email = 'Email is required';
@@ -67,6 +68,9 @@
 			isValid = false;
 		} else if (!lowercaseRegex.test(password)) {
 			errors.password = 'Password must contain at least 1 lowercase letter';
+			isValid = false;
+		} else if (!number.test(password)) {
+			errors.password = 'Password must contain at least 1 number';
 			isValid = false;
 		}
 		if (!confirmPassword) {
@@ -140,7 +144,8 @@
 					.update({ username, full_name, matrikID, role, phone, email })
 					// @ts-ignore
 					.eq('id', data.user.id);
-				goto('/login?message=Please confirm your email before logging in.');
+				alert('Please confirm your email before logging in.');
+				goto('/login', { replaceState: true });
 			} else {
 				if (error.status === 429) {
 						errorMessage = 'Rate limit exceeded. Please try again later.';

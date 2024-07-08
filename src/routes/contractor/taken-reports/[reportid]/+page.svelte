@@ -3,7 +3,7 @@
     import type { PageData } from '../[reportid]/$types';
     import Map from './Map.svelte';
     import { writable } from 'svelte/store';
-	import Sectionwrapper from '../../component/sectionwrapper.svelte';
+    import Sectionwrapper from '../../component/sectionwrapper.svelte';
     import Headers from '../../component/header.svelte';
 
     export let data: PageData;
@@ -33,13 +33,13 @@
     };
     
     function confirmSubmit(id: any) {
-		if (!validateForm()) {
+        if (!validateForm()) {
             console.error('Form validation failed');
             return;
-		}
+        }
         reportIdToconfirm = id;
-		showSubmitConfirm = true;
-	}
+        showSubmitConfirm = true;
+    }
 
     async function handleSubmit(event) {
         showSubmitConfirm = false;
@@ -72,12 +72,11 @@
             return;
         }
 
-        event.preventDefault();
-        //let newImages = await handleImageUpload();
+        console.log("Report ID to confirm:", reportIdToconfirm);
 
         function extractFullPath(data) {
-			return data.map((item) => item.fullPath);
-		}
+            return data.map((item) => item.fullPath);
+        }
 
         // Update report with new images and status
         const { error } = await supabase.from('reports').update({
@@ -85,7 +84,7 @@
             status: 'done progress',
             handleby: session?.user.id,
             updated_at: currentTime
-        }).eq('id', showSubmitConfirm);
+        }).eq('id', reportIdToconfirm);
 
         if (error) {
             console.error('Error updating report:', error.message);

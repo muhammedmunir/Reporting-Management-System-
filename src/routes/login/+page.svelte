@@ -2,7 +2,6 @@
 	import { goto, invalidateAll } from '$app/navigation';
 	import Sectionwrapper from '../component/sectionwrapper.svelte';
     import Header from "../component/header.svelte";
-    import { page } from '$app/stores';
 
 	export let data;
 	let { supabase, session } = data;

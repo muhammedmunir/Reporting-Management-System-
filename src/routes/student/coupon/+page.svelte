@@ -70,24 +70,28 @@
     <Headers { data } />
     <div class="flex flex-col gap-10 flex-1 items-center justify-center pb-10 md:pb-14 w-full">
         <h2 class="text-3xl sm:text-1xl md:text-2xl lg:text-3xl max-w-[1200px] mx-auto w-full text-center font-semibold">Claimed Coupons</h2>
-        <section class="min-h-screen flex flex-col px-4 w-full">
-            <div class="flex flex-col flex-1 max-w-[1400px] mx-auto w-full">
-                <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-                    {#each claimedCoupons as claimedCoupon}
-                        {#if !claimedCoupon.used}
-                            <div class="border p-4 rounded-lg shadow-sm hover:shadow-md">
-                                <h3 class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-full text-center font-semibold">{claimedCoupon.coupons.title}</h3>
-                                <p class="mt-2 text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-full">Price: RM{claimedCoupon.coupons.price.toFixed(2)}</p>
-                                <p class="mt-2 text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-full">Claimed at: {new Date(claimedCoupon.claimed_at).toLocaleString()}</p>
-                                <button class="mt-4 px-4 py-2 rounded specialBtnDark hover:bg-red-900"
-                                        on:click={() => handleUseCoupon(claimedCoupon.id, claimedCoupon.coupon_id)}>
-                                    Use Coupon
-                                </button>
-                            </div>
-                        {/if}
-                    {/each}
+        {#if claimedCoupons?.length > 0}
+            <section class="min-h-screen flex flex-col px-4 w-full">
+                <div class="flex flex-col flex-1 max-w-[1400px] mx-auto w-full">
+                    <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                        {#each claimedCoupons as claimedCoupon}
+                            {#if !claimedCoupon.used}
+                                <div class="border p-4 rounded-lg shadow-sm hover:shadow-md">
+                                    <h3 class="text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-full text-center font-semibold">{claimedCoupon.coupons.title}</h3>
+                                    <p class="mt-2 text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-full">Price: RM{claimedCoupon.coupons.price.toFixed(2)}</p>
+                                    <p class="mt-2 text-1xl sm:text-1xl md:text-1xl lg:text-1xl max-w-[1200px] mx-auto w-full">Claimed at: {new Date(claimedCoupon.claimed_at).toLocaleString()}</p>
+                                    <button class="mt-4 px-4 py-2 rounded specialBtnDark hover:bg-red-900"
+                                            on:click={() => handleUseCoupon(claimedCoupon.id, claimedCoupon.coupon_id)}>
+                                        Use Coupon
+                                    </button>
+                                </div>
+                            {/if}
+                        {/each}
+                    </div>
                 </div>
-            </div>
-        </section>
+            </section>
+        {:else}
+            <p class="text-12l sm:text-1xl md:text-2xl lg:text-2xl max-w-[1200px] mx-auto w-full text-center font-semibold">No available coupon</p>
+        {/if}
     </div>
 </Sectionwrapper>

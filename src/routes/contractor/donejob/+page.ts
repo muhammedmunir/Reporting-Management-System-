@@ -11,6 +11,7 @@ export const load = (async ({ parent, url, depends }) => {
 		.not('status', 'eq', 'rejected')
 		.not('status', 'eq', 'search contractor')
 		.not('status', 'eq', 'in progress')
+		.eq('handleby', session?.user.id)
 		.order('updated_at', { ascending: false });
 
 	return { reports };
